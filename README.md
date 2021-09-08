@@ -1,4 +1,5 @@
 # protranslating_clients
+Practical test for fullstack javascript developer with experience in Vue, Node.js, Express, MongoDB, and Swagger.
 
 ## Project setup
 ```
@@ -22,3 +23,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Project links
+- [GitHub]()
+- [Demo]()
