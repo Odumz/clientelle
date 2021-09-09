@@ -4,28 +4,34 @@
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <div class="flex py-5 justify-between items-center px-10 bg-gray-200">
+            <h1 class="text-2xl text-blue-500 font-bold">
+              Clients
+            </h1>
+            <button class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
+          </div>
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" class="px-6 py-3 text-lft text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Name
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" class="px-6 py-3 text-lft text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Email
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" class="px-6 py-3 text-lft text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Phone
                 </th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th scope="col" class="px-6 py-3 text-lft text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Provider
                 </th>
                 <th scope="col" class="relative px-6 py-3">
-                  <span class="sr-only">Edit</span>
+                  <span class="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="person in people" :key="person.email">
+              <tr v-for="person in people" :key="person.email" class="hover:bg-gray-100">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -35,19 +41,20 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
+                <td class="px-6 py-4 whitespace-nowrap flex justify-evenly">
                   <div class="text-sm text-gray-900">{{ person.email }}</div>
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {{ person.phone }}
-                  </span>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ person.phone }}
                 </td>
-                <td v-for="provider in person.providers" :key="provider.id" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ provider }}
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span v-for="provider in person.providers" :key="provider.id" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    {{ provider }}
+                  </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                  <!-- <a href="#" class="text-red-600 hover:text-red-900">Delete</a> -->
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
@@ -62,7 +69,7 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/runtime-core'
+// import { reactive } from '@vue/runtime-core'
 
 const people = [
   {
@@ -99,7 +106,7 @@ const people = [
   }
 ]
 
-export default defineComponent({
+export default ({
   setup () {
     return {
       people
