@@ -17,33 +17,72 @@
                   <Icon icon="bi:exclamation-triangle" class="h-6 w-6 text-red-600" aria-hidden="true" />
                 </div> -->
                 <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <div class="flex px-5 border-b-2">
                   <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                     New Client
                   </DialogTitle>
+                  </div>
                   <div class="mt-2">
                     <div>
-                        <!-- <div class="heading text-center font-bold text-2xl m-5">New Post</div> -->
-                        <div class="editor mx-auto flex flex-col text-gray-800 borer border-gray-300 p-4 shadow-lg max-w-2xl">
-                          <div class=""></div>
-                            <label for="name">Name</label>
-                            <input class="title bg-gray-100 dark:bg-gray-700 dark:text-skin-base border border-gray-300 p-2 mb-4 outline-none" spellcheck="false" placeholder="e.g. Folake Thompson" type="text">
-                            <textarea class="description bg-gray-100 dark:bg-gray-700 dark:text-skin-base sec p-3 h-60 border border-gray-300 outline-none" spellcheck="false" placeholder="Describe everything about this post here"></textarea>
-
-                            <!-- icons -->
-                            <div class="icons flex text-gray-600 dark:text-gray-400 m-2">
-                            <svg class="mr-2 cursor-pointer hover:text-gray-800 dark:hover:text-gray-100 border rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            <svg class="mr-2 cursor-pointer hover:text-gray-800 dark:hover:text-gray-100 border rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                            <svg class="mr-2 cursor-pointer hover:text-gray-800 dark:hover:text-gray-100 border rounded-full p-1 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
-                            <div class="count ml-auto text-gray-400 text-xs font-semibold">0/300</div>
-                            </div>
-                            <!-- buttons -->
-                            <div class="flex justify-end space-x-3">
-                                <btn name="simple-inverted"><p class="px-4 py-2">Cancel</p></btn>
-                                <btn name="simple"><p class="px-6 py-2">Post</p></btn>
-                            <!-- <div class="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500 ml-auto">Cancel</div>
-                            <div class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Post</div> -->
-                            </div>
+                      <form class="w-full max-w-sm">
+                        <div class="md:flex md:items-center mb-6">
+                          <div class="md:w-1/3">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                              Name:
+                            </label>
+                          </div>
+                          <div class="md:w-2/3">
+                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+                          </div>
                         </div>
+                        <div class="md:flex md:items-center mb-6">
+                          <div class="md:w-1/3">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                              Email:
+                            </label>
+                          </div>
+                          <div class="md:w-2/3">
+                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+                          </div>
+                        </div>
+                        <div class="md:flex md:items-center mb-6">
+                          <div class="md:w-1/3">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                              Phone:
+                            </label>
+                          </div>
+                          <div class="md:w-2/3">
+                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+                          </div>
+                        </div>
+                        <div class="md:flex md:items-center mb-6">
+                          <div class="md:w-1/3">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
+                              Password
+                            </label>
+                          </div>
+                          <div class="md:w-2/3">
+                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="******************">
+                          </div>
+                        </div>
+                        <div class="md:flex md:items-center mb-6">
+                          <div class="md:w-1/3"></div>
+                          <label class="md:w-2/3 block text-gray-500 font-bold">
+                            <input class="mr-2 leading-tight" type="checkbox">
+                            <span class="text-sm">
+                              Send me your newsletter!
+                            </span>
+                          </label>
+                        </div>
+                        <div class="md:flex md:items-center">
+                          <div class="md:w-1/3"></div>
+                          <div class="md:w-2/3">
+                            <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
+                              Sign Up
+                            </button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                     <p class="text-sm text-gray-500">
                       Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.
@@ -82,7 +121,7 @@ export default defineComponent({
     // Icon
   },
   setup () {
-    const open = ref(true)
+    const open = ref(false)
 
     return {
       open
