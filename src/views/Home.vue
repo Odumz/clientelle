@@ -21,3 +21,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  * {
+    overflow-x: hidden;
+  }
+</style>
