@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- <client-list /> -->
-    <client-list-2 />
+    <client-list-2 class="overflow-hidden" />
     <add-client />
   </div>
 </template>
