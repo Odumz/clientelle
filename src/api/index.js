@@ -12,14 +12,14 @@ export const fetchClient = async () => {
 }
 
 export const addClient = async (data) => {
-  const newData = JSON.stringify(data)
+  // const newData = JSON.stringify(data)
   console.log('i am here now')
-  console.log('current data', newData)
+  console.log('current data', data)
   console.log('current data name', data.name)
   console.log('current data email', data.email)
   console.log('current data phone', data.phone)
   console.log('current data provider', data.provider)
-  await axios.post(`${baseUrl}/clients/add`, newData)
+  await axios.post(`${baseUrl}/clients/add`, data)
     .then(response => {
       console.log('i am here')
       console.log('response team', response)
