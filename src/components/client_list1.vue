@@ -8,7 +8,7 @@
             <h1 class="text-2xl text-blue-500 font-bold">
               Clients
             </h1>
-            <button class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
+            <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
           </div>
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -56,10 +56,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                  <a href="#" :disabled="loadingState.value" @click.prevent="onEdit" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
+                  <a href="#" :disabled="loadingState.value" @click.prevent="onDelete" class="text-red-600 hover:text-red-900">Delete</a>
                 </td>
               </tr>
             </tbody>
@@ -98,7 +98,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
-// import * as api from '../api'
+import { fetchClient } from '../api'
 
 const store = useStore()
 
@@ -137,9 +137,17 @@ const store = useStore()
 //   }
 // ]
 const proclients = computed(() => {
-  console.log('loly')
-  console.log('store details', store.getters.getClients.value)
+  // console.log('loly')
+  // console.log('store details', store.getters.getClients.value)
   return store.getters.getClients.value
+})
+
+// const open = computed(() => {
+//   return store.getters.getOpenState
+// })
+
+const loadingState = computed(() => {
+  return store.getters.getLoadingState
 })
 
 // const { fetchClient } = api
@@ -151,9 +159,28 @@ onMounted(async () => {
   // }).catch(err => {
   //   console.log(err)
   // })
-  console.log('hi')
-  console.log(store)
-  store.dispatch('FETCH_CLIENTS')
+  // console.log('hi')
+  // console.log(store)
+  const data = await fetchClient()
+  await store.dispatch('FETCH_CLIENTS', data)
 })
 
+const onDelete = () => {
+  console.log('delete')
+  store.dispatch('UPDATE_LOADING_STATUS', true)
+  store.dispatch('UPDATE_LOADING_STATUS', false)
+  // delete()
+}
+
+const onEdit = () => {
+  console.log('edit')
+  store.dispatch('UPDATE_LOADING_STATUS', true)
+  store.dispatch('UPDATE_LOADING_STATUS', false)
+}
+
+const onAdd = () => {
+  console.log('add')
+  store.dispatch('UPDATE_LOADING_STATUS', true)
+  store.dispatch('UPDATE_LOADING_STATUS', false)
+}
 </script>
