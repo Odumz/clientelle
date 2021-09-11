@@ -10,8 +10,8 @@ const store = createStore({
     getClients: (state) => {
       return computed(() => {
         console.log('hi oh')
-        console.log('state.clients', JSON.stringify(state.clients))
-        return JSON.stringify(state.clients)
+        console.log('state.clients', state.clients)
+        return state.clients
       })
     }
   },
@@ -19,7 +19,7 @@ const store = createStore({
     GET_CLIENTS (state, clients) {
       console.log('hi from mutations')
       console.log('first state', state.clients)
-      state.clients = JSON.stringify(clients)
+      state.clients = clients
       console.log('second state', state.clients)
     },
     SET_CLIENT (state, clients) {
@@ -37,7 +37,7 @@ const store = createStore({
   actions: {
     FETCH_CLIENTS ({ commit }) {
       console.log('hello from mr fetch')
-      axois.get('http://localhost:5000/api/v1/clients')
+      axois.get('https://protranslating.herokuapp.com/api/v1/clients')
         .then(res => {
           console.log('hi again')
           console.log('fetchclient1', JSON.stringify(res.data.client))

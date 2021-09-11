@@ -2,9 +2,9 @@
 <template>
   <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="py-2 align-middle inline-block min-w-full">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-          <div class="flex py-5 justify-between items-center pl-14 pr-12 bg-gray-200">
+          <div class="flex py-5 justify-between items-center pl-14 pr-12 bg-gray-100">
             <h1 class="text-2xl text-blue-500 font-bold">
               Clients
             </h1>
@@ -13,28 +13,28 @@
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-3 py-3 text-xs border text-gray-500 font-bold tracking-wider">
+                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Name
                 </th>
-                <th scope="col" class="px-3 py-3 text-xs border text-gray-500 font-bold tracking-wider">
+                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Email
                 </th>
-                <th scope="col" class="px-3 py-3 text-xs border text-gray-500 font-bold tracking-wider">
+                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Phone
                 </th>
-                <th scope="col" class="px-3 py-3 text-xs border text-gray-500 font-bold tracking-wider">
+                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Provider
                 </th>
-                <!-- <th scope="col" class="px-3 py-3 text-xs border text-gray-500 font-bold tracking-wider">
-                </th> -->
-                <th scope="col" class="relative text-xs px-6 py-3">
+                <th scope="col" class="relative px-6 py-3">
                   <span class="sr-only">Actions</span>
+                </th>
+                <th scope="col" class="relative px-6 py-3">
                 </th>
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="(person) in proclients" :key="person._id" class="hover:bg-gray-100">
-                <td class="px-3 py-4 border-l whitespace-nowrap">
+              <tr v-for="(person, index) in proclients" :key="index" class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="ml-4">
                       <div class="text-sm font-medium text-gray-900">
@@ -43,32 +43,57 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-3 py-4 border-l whitespace-nowrap">
+                <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ person.email }}</div>
+                  <!-- <div class="text-sm text-gray-500">{{ person.department }}</div> -->
                 </td>
-                <td class="px-3 py-4 border-l whitespace-nowrap text-sm text-gray-500">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {{ person.phone }}
                 </td>
-                <td class="px-3 py-4 border-l whitespace-nowrap">
-                  <span v-for="provider in person.providers" :key="provider.id" class="px-2 inline-flex leading-5">
-                    {{ provider }}
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span v-for="provider in person.provider" :key="provider.id" class="px-2 inline-flex leading-5 rounded-full">
+                    {{ provider }},
                   </span>
                 </td>
-                <td class="px-3 py-4 border-l whitespace-nowrap text-right text-sm flex justify-around font-medium">
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
                 </td>
-                <!-- <td class="px-3 py-4 whitespace-nowrap border-l text-right text-sm font-medium">
-                  <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
-                </td> -->
               </tr>
             </tbody>
           </table>
+          <div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+// const people = [
+//   {
+//     name: 'Jane Cooper',
+//     title: 'Regional Paradigm Technician',
+//     department: 'Optimization',
+//     role: 'Admin',
+//     email: 'jane.cooper@example.com',
+//     image:
+//       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
+//   },
+//   // More people...
+// ]
+
+// export default {
+//   setup() {
+//     return {
+//       people,
+//     }
+//   },
+// }
+</script>
 
 <script setup>
 import { useStore } from 'vuex'
@@ -113,8 +138,8 @@ const store = useStore()
 // ]
 const proclients = computed(() => {
   console.log('loly')
-  console.log('store details', JSON.parse(store.getters.getClients.value))
-  return JSON.parse(store.getters.getClients.value)
+  console.log('store details', store.getters.getClients.value)
+  return store.getters.getClients.value
 })
 
 // const { fetchClient } = api
