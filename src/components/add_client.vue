@@ -4,7 +4,7 @@
     <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="open = false">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
-          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <DialogOverlay @click.prevent="close" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
@@ -13,90 +13,95 @@
           <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div class="sm:flex sm:items-start">
-                <!-- <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                  <Icon icon="bi:exclamation-triangle" class="h-6 w-6 text-red-600" aria-hidden="true" />
-                </div> -->
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                  <div class="flex px-5 border-b-2">
+                <div @keyup.esc="close" class="mt-3 text-center sm:mt-0 sm:text-left">
+                  <div class="flex px-5 borderb-2">
                   <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                     New Client
                   </DialogTitle>
                   </div>
-                  <div class="mt-2">
-                    <div>
-                      <form class="w-full max-w-sm">
+                  <hr class="my-3 w-full -ml-10 px-64" />
+                  <div class="mt-6">
+                    <div class="flex justify-center">
+                      <form class="w-full max-w-sm center">
                         <div class="md:flex md:items-center mb-6">
-                          <div class="md:w-1/3">
+                          <div class="md:w-1/5">
                             <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
                               Name:
                             </label>
                           </div>
-                          <div class="md:w-2/3">
-                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+                          <div class="md:w-full">
+                            <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Jane Doe">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
-                          <div class="md:w-1/3">
-                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                          <div class="md:w-1/5">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-email">
                               Email:
                             </label>
                           </div>
-                          <div class="md:w-2/3">
-                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+                          <div class="md:w-full">
+                            <input v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="email" placeholder="JaneDoe@gmail.com">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
-                          <div class="md:w-1/3">
-                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+                          <div class="md:w-1/5">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-phone">
                               Phone:
                             </label>
                           </div>
-                          <div class="md:w-2/3">
-                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" value="Jane Doe">
+                          <div class="md:w-full">
+                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="tel" placeholder="08054236958">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
-                          <div class="md:w-1/3">
-                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
-                              Password
+                          <div class="md:w-1/5">
+                            <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-provider">
+                              Provider:
                             </label>
                           </div>
-                          <div class="md:w-2/3">
-                            <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="password" placeholder="******************">
+                          <div class="md:grid md:grid-cols-4 md:w-2/3 items-center">
+                            <div class="md:w6/7 col-span-3">
+                              <input v-model="proclient.provider" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-provider" type="text" placeholder="provider1">
+                            </div>
+                            <div class="md:w-full col-span-1">
+                              <button type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showProvider" tabindex="0">
+                                Add Provider
+                              </button>
+                            </div>
+                            <!-- <span>
+                              {{ checkedNames }}
+                            </span> -->
+                            <!-- <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-provider" type="text" placeholder="-- Select Provider(s) --" value=""> -->
+                            <!-- <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+                            <label for="jack">Jack</label>
+                            <input type="checkbox" id="john" value="John" v-model="checkedNames" />
+                            <label for="john">John</label>
+                            <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
+                            <label for="mike">Mike</label> -->
                           </div>
                         </div>
-                        <div class="md:flex md:items-center mb-6">
-                          <div class="md:w-1/3"></div>
-                          <label class="md:w-2/3 block text-gray-500 font-bold">
-                            <input class="mr-2 leading-tight" type="checkbox">
-                            <span class="text-sm">
-                              Send me your newsletter!
-                            </span>
-                          </label>
-                        </div>
-                        <div class="md:flex md:items-center">
-                          <div class="md:w-1/3"></div>
-                          <div class="md:w-2/3">
-                            <button class="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
-                              Sign Up
-                            </button>
+                        <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border">
+                          <div v-for="(person, index) in proclients" :key="index" class="flex justify-center items-center">
+                              <input type="checkbox" :name="person.name" class="mx-3">
+                              <label for="provider1">{{ person.name }}</label>
+                              <div class="flex justify-between">
+                                <Icon icon="bx:bxs-edit" class="mx-4" />
+                                <Icon icon="fluent:delete-24-filled" />
+                              </div>
                           </div>
                         </div>
                       </form>
                     </div>
-                    <p class="text-sm text-gray-500">
-                      Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.
-                    </p>
                   </div>
                 </div>
               </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click="open = false">
-                Deactivate
-              </button>
-              <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="open = false" ref="cancelButtonRef">
+              <button type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="close">
                 Cancel
+              </button>
+              <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
+                Add Client
               </button>
             </div>
           </div>
@@ -106,26 +111,64 @@
   </TransitionRoot>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
+<script setup>
+import { useStore } from 'vuex'
+import { computed, ref } from 'vue'
+import Swal from 'sweetalert2'
+import { addClient } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-// import { Icon } from '@iconify/vue'
+import { Icon } from '@iconify/vue'
 
-export default defineComponent({
-  components: {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot
-    // Icon
-  },
-  setup () {
-    const open = ref(false)
+const store = useStore()
 
-    return {
-      open
-    }
-  }
+const open = computed(() => {
+  return store.getters.getOpenState.value
 })
+
+const close = () => {
+  store.dispatch('UPDATE_OPEN_STATUS', false)
+}
+
+// const provider = computed(() => {
+//   return store.getters.getProviderState.value
+// })
+
+const showProvider = () => {
+  console.log('hi')
+  store.dispatch('UPDATE_PROVIDER_STATUS', true)
+}
+
+const proclients = computed(() => {
+  // console.log('loly')
+  // console.log('store details', store.getters.getClients.value)
+  return store.getters.getClients.value
+})
+
+const proclient = ref({
+  name: '',
+  email: '',
+  phone: '',
+  provider: ''
+})
+
+const onSubmit = async () => {
+  console.log('onsubmit', JSON.stringify(proclient.value))
+  console.log('addclient action', addClient(JSON.stringify(proclient.value)))
+  await store.dispatch('ADD_CLIENT', addClient(JSON.stringify(proclient.value)))
+  Swal.fire('Successful', 'New client saved!', 'success')
+  // window.location.reload()
+}
+
+// onMounted(async () => {
+//   const data = await fetchClient()
+//   await store.dispatch('FETCH_CLIENTS', data)
+// })
+
+// const hideProvider = () => {
+//   console.log('hello')
+//   store.dispatch('UPDATE_PROVIDER_STATUS', false)
+// }
+
+// document.addEventListener('esc', close)
+
 </script>

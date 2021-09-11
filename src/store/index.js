@@ -7,13 +7,14 @@ const store = createStore({
   state: () => ({
     clients: '',
     loading: false,
-    open: false
+    open: false,
+    provider: false
   }),
   getters: {
     getClients: (state) => {
       return computed(() => {
         // console.log('hi oh')
-        console.log('state.clients', state.clients)
+        // console.log('state.clients', state.clients)
         return state.clients
       })
     },
@@ -26,12 +27,17 @@ const store = createStore({
       return computed(() => {
         return state.open
       })
+    },
+    getProviderState: (state) => {
+      return computed(() => {
+        return state.provider
+      })
     }
   },
   mutations: {
     GET_CLIENTS (state, clients) {
       // console.log('hi from mutations')
-      console.log('first state', state.clients)
+      // console.log('first state', state.clients)
       state.clients = clients
       console.log('second state', state.clients)
     },
@@ -51,6 +57,9 @@ const store = createStore({
     },
     SET_OPEN_STATUS (state, data) {
       state.open = data
+    },
+    SET_PROVIDER_STATUS (state, data) {
+      state.provider = data
     }
   },
   actions: {
@@ -69,6 +78,7 @@ const store = createStore({
       // .then(clients => commit('GET_CLIENTS', clients))
     },
     ADD_CLIENT ({ commit }, client) {
+      console.log('added client', client)
       commit('SET_CLIENT', client)
     },
     REMOVE_CLIENT ({ commit }, client) {
@@ -82,6 +92,9 @@ const store = createStore({
     },
     UPDATE_OPEN_STATUS ({ commit }, data) {
       commit('SET_OPEN_STATUS', data)
+    },
+    UPDATE_PROVIDER_STATUS ({ commit }, data) {
+      commit('SET_PROVIDER_STATUS', data)
     }
   }
 })

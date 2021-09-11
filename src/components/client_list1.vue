@@ -99,6 +99,7 @@
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
 import { fetchClient } from '../api'
+// import Swal from 'sweetalert2'
 
 const store = useStore()
 
@@ -161,6 +162,7 @@ onMounted(async () => {
   // })
   // console.log('hi')
   // console.log(store)
+  // Swal.fire('Oops...', 'Something went wrong!', 'success')
   const data = await fetchClient()
   await store.dispatch('FETCH_CLIENTS', data)
 })
@@ -181,6 +183,7 @@ const onEdit = () => {
 const onAdd = () => {
   console.log('add')
   store.dispatch('UPDATE_LOADING_STATUS', true)
+  store.dispatch('UPDATE_OPEN_STATUS', true)
   store.dispatch('UPDATE_LOADING_STATUS', false)
 }
 </script>
