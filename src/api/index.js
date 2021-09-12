@@ -16,21 +16,14 @@ export const addData = async (url, data) => {
   // const newData = JSON.stringify(data)
   // console.log('i am here now')
   console.log('currently data', data)
-  // console.log('object keys of current data', Object.keys(data))
-  // const newData = JSON.stringify(data)
-  // console.log('newData', newData)
-  // console.log('current data name', data.name)
-  // console.log('current data email', data.email)
-  // console.log('current data phone', data.phone)
-  // console.log('current data provider', data.provider)
   await axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
     .then(response => {
       // console.log('i am here in processing')
       console.log('response team', response.data)
       Swal.fire('Successfully', 'added', 'success')
-      // setTimeout(() => {
-      //   window.location.reload()
-      // }, 20500)
+      setTimeout(() => {
+        window.location.reload()
+      }, 2500)
       return response.data
     })
     .catch((error) => {
