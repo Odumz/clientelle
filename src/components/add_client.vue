@@ -60,14 +60,19 @@
                             </label>
                           </div>
                           <div class="md:grid md:grid-cols-4 md:w-2/3 items-center">
-                            <div class="md:w6/7 col-span-3">
+                            <div class="md:w6/7 col-span-3 flex">
                               <input v-model="newProvider.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
-                              {{ newProvider.name }}
+                              <Icon v-if="editing" icon="akar-icons:circle-x" class="m-3" @click.prevent="cancelEdit" />
                             </div>
                             <div class="md:w-full col-span-1">
-                              <button type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="editing ? saveProvider(newProvider._id) : addProvider">
-                                {{ buttonText }}
+                              <button v-if="!editing" type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
+                                Add Provider
                               </button>
+                              <div class="relative px-1" v-else>
+                              <button type="button" class="mt-3 ml-5 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="saveProvider(newProvider._id)">
+                                Save Provider
+                              </button>
+                              </div>
                             </div>
                             <!-- <span>
                               {{ checkedNames }}
@@ -161,6 +166,12 @@ const proclient = ref({
   provider: []
 })
 
+const cancelEdit = async () => {
+  console.log('cancel edit')
+  newProvider.value.name = ''
+  store.dispatch('UPDATE_EDITING_STATUS', false)
+}
+
 const deleteProvider = async (id) => {
   console.log('delete provider', id)
   const url = `${process.env.VUE_APP_API_URL}/providers/delete`
@@ -171,10 +182,6 @@ const deleteProvider = async (id) => {
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
   return await store.getters.getProviders.value
 }
-
-const buttonText = computed(() => {
-  return editing.value ? 'Save Provider' : 'Add Provider'
-})
 
 const editProvider = async (id) => {
   console.log('edit provider', id)
@@ -201,8 +208,8 @@ const onSubmit = async () => {
   // console.log('addclient action', addData(process.env.VUE_APP_API_URL + '/clients/add', JSON.stringify(proclient.value)))
   const newClient = await addData(url, data)
   console.log('newclient is now', newClient)
-  await store.dispatch('ADD_CLIENT', newClient)
   saveProvider()
+  await store.dispatch('ADD_CLIENT', newClient)
   // Swal.fire('Successful', 'New clientresponse saved!', 'success')
   // window.location.reload()
 }
@@ -213,6 +220,7 @@ const addProvider = async () => {
   // const data = {
   //   name: newProvider.value
   // }
+  console.log('new value of propro', newProvider.value)
   const data = JSON.stringify(newProvider.value)
   console.log('addProvider button clicked')
   console.log('add provider function', data)
@@ -227,7 +235,7 @@ const addProvider = async () => {
 
 const saveProvider = async (id) => {
   const url = process.env.VUE_APP_API_URL + '/providers/edit'
-  console.log('id is :', id)
+  console.log('save provider id is :', id)
   // console.log('payload', payload)
   const data = JSON.stringify(newProvider.value)
   console.log('addProvider button clicked')

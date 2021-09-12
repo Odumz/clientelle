@@ -21,16 +21,16 @@ export const fetchDataByID = async (url, id) => {
 
 export const addData = async (url, data) => {
   // const newData = JSON.stringify(data)
-  // console.log('i am here now')
+  console.log('i am here now')
   console.log('currently data', data)
   return await axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
     .then(response => {
       // console.log('i am here in processing')
       console.log('response team', response.data)
       Swal.fire('Successfully', 'added', 'success')
-      setTimeout(() => {
-        window.location.reload()
-      }, 2500)
+      // setTimeout(() => {
+      //   window.location.reload()
+      // }, 2500)
       return response.data
     })
     .catch((error) => {
