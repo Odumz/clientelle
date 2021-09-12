@@ -72,29 +72,6 @@
   </div>
 </template>
 
-<script>
-// const people = [
-//   {
-//     name: 'Jane Cooper',
-//     title: 'Regional Paradigm Technician',
-//     department: 'Optimization',
-//     role: 'Admin',
-//     email: 'jane.cooper@example.com',
-//     image:
-//       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60',
-//   },
-//   // More people...
-// ]
-
-// export default {
-//   setup() {
-//     return {
-//       people,
-//     }
-//   },
-// }
-</script>
-
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
@@ -103,40 +80,6 @@ import { fetchData } from '../api'
 
 const store = useStore()
 
-// const people = [
-//   {
-//     name: 'Test',
-//     phone: '0934387483',
-//     providers: [
-//       { id: 1 }, { id: 2 }, { id: 3 }
-//     ],
-//     email: 'jane.cooper@example.com'
-//   },
-//   {
-//     name: 'Test1',
-//     phone: '0910257483',
-//     providers: [
-//       { id: 5 }, { id: 7 }
-//     ],
-//     email: 'jane.cooper@example.com'
-//   },
-//   {
-//     name: 'Test2',
-//     phone: '02392842983',
-//     providers: [
-//       { id: 4 }, { id: 6 }
-//     ],
-//     email: 'jane.cooper@example.com'
-//   },
-//   {
-//     name: 'Test3',
-//     phone: '08132834545',
-//     providers: [
-//       { id: 5 }
-//     ],
-//     email: 'jane.cooper@example.com'
-//   }
-// ]
 const proclients = computed(() => {
   // console.log('loly')
   // console.log('store details', store.getters.getClients.value)
@@ -154,15 +97,7 @@ const loadingState = computed(() => {
 // const { fetchData } = api
 
 onMounted(async () => {
-  // proclients
-  // await fetchData().then(res => {
-  //   proclients.push(...res.data)
-  // }).catch(err => {
-  //   console.log(err)
-  // })
   console.log('hi')
-  // console.log(store)
-  // Swal.fire('Oops...', 'Something went wrong!', 'success')
   const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
   console.log('client', clientData.client)
@@ -175,7 +110,6 @@ const onDelete = (id) => {
   console.log('delete')
   store.dispatch('UPDATE_LOADING_STATUS', true)
   store.dispatch('UPDATE_LOADING_STATUS', false)
-  // delete()
 }
 
 const onEdit = () => {
