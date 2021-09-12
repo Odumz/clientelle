@@ -8,6 +8,7 @@ const store = createStore({
     clients: '',
     loading: false,
     open: false,
+    isEditing: false,
     providers: ''
   }),
   getters: {
@@ -31,6 +32,11 @@ const store = createStore({
     getProviders: (state) => {
       return computed(() => {
         return state.providers
+      })
+    },
+    getIsEditingStatus: (state) => {
+      return computed(() => {
+        return state.isEditing
       })
     }
   },
@@ -58,10 +64,14 @@ const store = createStore({
     SET_OPEN_STATUS (state, data) {
       state.open = data
     },
+    SET_EDITING_STATUS (state, data) {
+      state.isEditing = data
+    },
     GET_PROVIDERS (state, data) {
       state.providers = data
     },
     SET_PROVIDER (state, data) {
+      console.log('new provider data in store: ', data)
       state.provider = [...state.providers, data]
     },
     DELETE_PROVIDER (state, id) {
@@ -89,8 +99,8 @@ const store = createStore({
       // .then(clients => commit('GET_CLIENTS', clients))
     },
     ADD_CLIENT ({ commit }, client) {
-      console.log('added client', client)
-      commit('SET_CLIENT', client)
+      console.log('added client', client.client)
+      commit('SET_CLIENT', client.client)
     },
     REMOVE_CLIENT ({ commit }, client) {
       commit('DELETE_CLIENT', client)
@@ -103,6 +113,9 @@ const store = createStore({
     },
     UPDATE_OPEN_STATUS ({ commit }, data) {
       commit('SET_OPEN_STATUS', data)
+    },
+    UPDATE_EDITING_STATUS ({ commit }, data) {
+      commit('SET_EDITING_STATUS', data)
     },
     FETCH_PROVIDERS ({ commit }, data) {
       console.log('hello from mr fetch')

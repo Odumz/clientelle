@@ -61,12 +61,12 @@
                           </div>
                           <div class="md:grid md:grid-cols-4 md:w-2/3 items-center">
                             <div class="md:w6/7 col-span-3">
-                              <input v-model="proclient.provider" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
-                              {{ newProvider }}
+                              <input v-model="newProvider.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
+                              {{ newProvider.name }}
                             </div>
                             <div class="md:w-full col-span-1">
-                              <button type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
-                                Add Provider
+                              <button type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="editing ? saveProvider(newProvider._id) : addProvider">
+                                {{ buttonText }}
                               </button>
                             </div>
                             <!-- <span>
@@ -81,16 +81,17 @@
                             <label for="mike">Mike</label> -->
                           </div>
                         </div>
-                        <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border">
-                          <div v-for="(person, index) in provider" :key="index" class="flex justify-center items-center">
+                        <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
+                          <div v-for="(person, index) in provider" :key="index" class="flex items-center">
                               <input type="checkbox" :name="person.name" class="mx-3">
-                              <label for="provider1">{{ person.name }}</label>
+                              <label for="provider1" class="w-1/2">{{ person.name }}</label>
                               <div class="flex justify-between">
-                                <Icon icon="bx:bxs-edit" class="mx-4" />
-                                <Icon icon="fluent:delete-24-filled" />
+                                <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(person._id)" />
+                                <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(person._id)" />
                               </div>
                           </div>
                         </div>
+                              <!-- {{ provider }} -->
                       </form>
                     </div>
                   </div>
@@ -116,7 +117,7 @@
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 // import Swal from 'sweetalert2'
-import { addData } from '../api'
+import { fetchData, addData, removeData, fetchDataByID, editData } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { Icon } from '@iconify/vue'
 
@@ -126,11 +127,17 @@ const open = computed(() => {
   return store.getters.getOpenState.value
 })
 
+const editing = computed(() => {
+  return store.getters.getIsEditingStatus.value
+})
+
 const close = () => {
   store.dispatch('UPDATE_OPEN_STATUS', false)
 }
 
-const newProvider = ref('')
+const newProvider = ref({
+  name: ''
+})
 
 // const provider = computed(() => {
 //   return store.getters.getProviderState.value
@@ -143,7 +150,7 @@ const newProvider = ref('')
 
 const provider = computed(() => {
   // console.log('loly')
-  // console.log('provider details', store.getters.getProviders.value)
+  console.log('provider details', store.getters.getProviders.value)
   return store.getters.getProviders.value
 })
 
@@ -151,8 +158,38 @@ const proclient = ref({
   name: '',
   email: '',
   phone: '',
-  provider: ''
+  provider: []
 })
+
+const deleteProvider = async (id) => {
+  console.log('delete provider', id)
+  const url = `${process.env.VUE_APP_API_URL}/providers/delete`
+  console.log('url', url)
+  const removedData = await removeData(url, id)
+  console.log('removedData', removedData)
+  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  return await store.getters.getProviders.value
+}
+
+const buttonText = computed(() => {
+  return editing.value ? 'Save Provider' : 'Add Provider'
+})
+
+const editProvider = async (id) => {
+  console.log('edit provider', id)
+  const url = `${process.env.VUE_APP_API_URL}/providers`
+  console.log('url', url)
+  const editData = await fetchDataByID(url, id)
+  console.log('editData', editData.provider)
+  newProvider.value = editData.provider
+  console.log('newProvider from edit', newProvider.value)
+  await store.dispatch('UPDATE_EDITING_STATUS', true)
+  // saveProvider(id, newProvider.value)
+  // const payload = JSON.stringify(newProvider.value)
+  // const editedData = await editData(url, id, payload)
+  // console.log('editedData', editedData)
+}
 
 const onSubmit = async () => {
   const url = process.env.VUE_APP_API_URL + '/clients/add'
@@ -165,14 +202,44 @@ const onSubmit = async () => {
   const newClient = await addData(url, data)
   console.log('newclient is now', newClient)
   await store.dispatch('ADD_CLIENT', newClient)
+  saveProvider()
   // Swal.fire('Successful', 'New clientresponse saved!', 'success')
   // window.location.reload()
 }
 
 const addProvider = async () => {
-  const anotherProvider = newProvider
+  const url = process.env.VUE_APP_API_URL + '/providers/add'
+  // const data = JSON.stringify(newProvider.value)
+  // const data = {
+  //   name: newProvider.value
+  // }
+  const data = JSON.stringify(newProvider.value)
   console.log('addProvider button clicked')
-  console.log('add provider', anotherProvider.value)
+  console.log('add provider function', data)
+  const anotherProvider = await addData(url, data)
+  console.log('anotherProvider is now', anotherProvider.provider)
+  await store.dispatch('ADD_PROVIDER', anotherProvider.provider)
+  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  newProvider.value.name = ''
+  return await store.getters.getProviders.value
+}
+
+const saveProvider = async (id) => {
+  const url = process.env.VUE_APP_API_URL + '/providers/edit'
+  console.log('id is :', id)
+  // console.log('payload', payload)
+  const data = JSON.stringify(newProvider.value)
+  console.log('addProvider button clicked')
+  console.log('add provider function', data)
+  const anotherProvider = await editData(url, id, data)
+  console.log('anotherProvider is now', anotherProvider.provider)
+  await store.dispatch('ADD_PROVIDER', anotherProvider.provider)
+  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  await store.dispatch('UPDATE_EDITING_STATUS', false)
+  newProvider.value.name = ''
+  return await store.getters.getProviders.value
 }
 
 // onMounted(async () => {

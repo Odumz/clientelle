@@ -56,10 +56,10 @@
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <a href="#" :disabled="loadingState.value" @click.prevent="onEdit" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                  <a href="#" :disabled="loadingState.value" @click.prevent="onEdit(person._id)" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <a href="#" :disabled="loadingState.value" @click.prevent="onDelete" class="text-red-600 hover:text-red-900">Delete</a>
+                  <a href="#" :disabled="loadingState.value" @click.prevent="onDelete(person._id)" class="text-red-600 hover:text-red-900">Delete</a>
                 </td>
               </tr>
             </tbody>
@@ -75,14 +75,14 @@
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
-import { fetchData } from '../api'
+import { fetchData, removeData } from '../api'
 // import Swal from 'sweetalert2'
 
 const store = useStore()
 
 const proclients = computed(() => {
   // console.log('loly')
-  // console.log('store details', store.getters.getClients.value)
+  console.log('store details', store.getters.getClients.value)
   return store.getters.getClients.value
 })
 
@@ -106,16 +106,30 @@ onMounted(async () => {
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
 })
 
-const onDelete = (id) => {
-  console.log('delete')
+const onDelete = async (id) => {
   store.dispatch('UPDATE_LOADING_STATUS', true)
+  console.log('delete')
+  console.log('id is ', id)
+  const url = `${process.env.VUE_APP_API_URL}/clients/delete`
+  console.log('url is ', url)
+  const removedClient = await removeData(url, id)
+  console.log('removedClient is ', removedClient)
+  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  await store.dispatch('FETCH_CLIENTS', clientData.client)
   store.dispatch('UPDATE_LOADING_STATUS', false)
+  return await store.getters.getClients.value
 }
 
-const onEdit = () => {
-  console.log('edit')
+const onEdit = async (id) => {
   store.dispatch('UPDATE_LOADING_STATUS', true)
+  console.log('edit')
+  console.log('id is ', id)
+  const url = `${process.env.VUE_APP_API_URL}/clients/edit`
+  console.log('url is ', url)
+  // const removedClient = await removeData(url, id)
+  // console.log('removedClient is ', removedClient)
   store.dispatch('UPDATE_LOADING_STATUS', false)
+  return await store.getters.getClients.value
 }
 
 const onAdd = () => {

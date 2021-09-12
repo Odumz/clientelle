@@ -1,10 +1,17 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-const baseUrl = 'https://protranslating.herokuapp.com/api/v1'
-
 export const fetchData = async (url) => {
   return await axios.get(url)
+    .then(response => response.data
+    )
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+export const fetchDataByID = async (url, id) => {
+  return await axios.get(`${url}/${id}`)
     .then(response => response.data
     )
     .catch(error => {
@@ -16,7 +23,7 @@ export const addData = async (url, data) => {
   // const newData = JSON.stringify(data)
   // console.log('i am here now')
   console.log('currently data', data)
-  await axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
+  return await axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
     .then(response => {
       // console.log('i am here in processing')
       console.log('response team', response.data)
@@ -32,65 +39,41 @@ export const addData = async (url, data) => {
     })
 }
 
-// export const addData = async (data) => {
-//   console.log('i am here now')
-//   console.log('current data', data)
-//   console.log('current data name', data.name)
-//   console.log('current data email', data.email)
-//   console.log('current data phone', data.phone)
-//   console.log('current data provider', data.provider)
-//   await axios.post(`${baseUrl}/clients/add`, {
-//     name: data.name,
-//     email: data.email,
-//     phone: data.phone,
-//     provider: data.provider
-//   })
-//     .then(response => {
-//       console.log('i am here')
-//       console.log('response team', response)
-//       return response
-//     })
-//     .catch((error) => {
-//       console.log(error.response.data)
-//     })
-// }
-
-// export const addData = async () => {
-//   console.log('i am here now')
-//   console.log('current data')
-//   await axios.post(`${baseUrl}/clients/add`, {
-//     name: 'test',
-//     email: 'someemail@ascom.sop',
-//     phone: '123456789',
-//     provider: ['provider1', 'provider3']
-//   })
-//     .then(response => {
-//       console.log('i am here')
-//       console.log('response team', response)
-//     })
-//     .catch((error) => {
-//       console.log(error.response.data)
-//     })
-// }
-
-export const editData = async () => {
-  await axios.put()
-    .then()
-    .catch()
+export const editData = async (url, id, payload) => {
+  return await axios.put(`${url}/${id}`, payload, { headers: { 'Content-Type': 'application/json' } })
+    .then(
+      response => {
+        console.log('response team', response.data)
+        Swal.fire('Successfully', 'edited', 'success')
+        return response.data
+      }
+    )
+    .catch((error) => {
+      console.log(error.message)
+      Swal.fire('Error', 'missing details', 'error')
+    })
 }
 
-export const removeData = async (id) => {
-  await axios.delete(`${baseUrl}/clients/${id}`)
+export const removeData = async (url, id) => {
+  return await axios.delete(`${url}/${id}`)
     .then(
-      response => response.data.client
+      response => {
+        console.log('response team', response.data)
+        Swal.fire('Successfully', 'deleted', 'success')
+        return response.data
+      }
     )
-    .catch(error => {
-      console.log(error)
+    .catch((error) => {
+      console.log(error.message)
+      Swal.fire('Error', 'missing details', 'error')
     })
 }
 
 export const filterData = async () => {
-  await axios.get()
+  return await axios.get()
     .then()
-    .catch()
+    .catch((error) => {
+      console.log(error.message)
+      Swal.fire('Error', 'missing details', 'error')
+    })
 }
