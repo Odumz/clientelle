@@ -98,7 +98,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
-import { fetchClient } from '../api'
+import { fetchData } from '../api'
 // import Swal from 'sweetalert2'
 
 const store = useStore()
@@ -148,26 +148,30 @@ const proclients = computed(() => {
 // })
 
 const loadingState = computed(() => {
-  return store.getters.getLoadingState
+  return store.getters.getLoadingState.value
 })
 
-// const { fetchClient } = api
+// const { fetchData } = api
 
 onMounted(async () => {
   // proclients
-  // await fetchClient().then(res => {
+  // await fetchData().then(res => {
   //   proclients.push(...res.data)
   // }).catch(err => {
   //   console.log(err)
   // })
-  // console.log('hi')
+  console.log('hi')
   // console.log(store)
   // Swal.fire('Oops...', 'Something went wrong!', 'success')
-  const data = await fetchClient()
-  await store.dispatch('FETCH_CLIENTS', data)
+  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  console.log('client', clientData.client)
+  console.log('provider from client', providerData.provider)
+  await store.dispatch('FETCH_CLIENTS', clientData.client)
+  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
 })
 
-const onDelete = () => {
+const onDelete = (id) => {
   console.log('delete')
   store.dispatch('UPDATE_LOADING_STATUS', true)
   store.dispatch('UPDATE_LOADING_STATUS', false)

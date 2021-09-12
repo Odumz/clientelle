@@ -30,7 +30,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="Jane Doe">
+                            <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
@@ -40,7 +40,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="email" placeholder="JaneDoe@gmail.com">
+                            <input v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
@@ -50,7 +50,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="tel" placeholder="08054236958">
+                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="tel" placeholder="08054236958">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
@@ -61,17 +61,18 @@
                           </div>
                           <div class="md:grid md:grid-cols-4 md:w-2/3 items-center">
                             <div class="md:w6/7 col-span-3">
-                              <input v-model="proclient.provider" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-provider" type="text" placeholder="provider1">
+                              <input v-model="proclient.provider" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
+                              {{ newProvider }}
                             </div>
                             <div class="md:w-full col-span-1">
-                              <button type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="showProvider" tabindex="0">
+                              <button type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
                                 Add Provider
                               </button>
                             </div>
                             <!-- <span>
                               {{ checkedNames }}
                             </span> -->
-                            <!-- <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-provider" type="text" placeholder="-- Select Provider(s) --" value=""> -->
+                            <!-- <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="-- Select Provider(s) --" value=""> -->
                             <!-- <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
                             <label for="jack">Jack</label>
                             <input type="checkbox" id="john" value="John" v-model="checkedNames" />
@@ -81,7 +82,7 @@
                           </div>
                         </div>
                         <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border">
-                          <div v-for="(person, index) in proclients" :key="index" class="flex justify-center items-center">
+                          <div v-for="(person, index) in provider" :key="index" class="flex justify-center items-center">
                               <input type="checkbox" :name="person.name" class="mx-3">
                               <label for="provider1">{{ person.name }}</label>
                               <div class="flex justify-between">
@@ -114,8 +115,8 @@
 <script setup>
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
-import Swal from 'sweetalert2'
-import { addClient } from '../api'
+// import Swal from 'sweetalert2'
+import { addData } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { Icon } from '@iconify/vue'
 
@@ -129,19 +130,21 @@ const close = () => {
   store.dispatch('UPDATE_OPEN_STATUS', false)
 }
 
+const newProvider = ref('')
+
 // const provider = computed(() => {
 //   return store.getters.getProviderState.value
 // })
 
-const showProvider = () => {
-  console.log('hi')
-  store.dispatch('UPDATE_PROVIDER_STATUS', true)
-}
+// const showProvider = () => {
+//   console.log('hi')
+//   store.dispatch('UPDATE_PROVIDER_STATUS', true)
+// }
 
-const proclients = computed(() => {
+const provider = computed(() => {
   // console.log('loly')
-  // console.log('store details', store.getters.getClients.value)
-  return store.getters.getClients.value
+  // console.log('provider details', store.getters.getProviders.value)
+  return store.getters.getProviders.value
 })
 
 const proclient = ref({
@@ -152,11 +155,24 @@ const proclient = ref({
 })
 
 const onSubmit = async () => {
-  console.log('onsubmit', JSON.stringify(proclient.value))
-  console.log('addclient action', addClient(JSON.stringify(proclient.value)))
-  await store.dispatch('ADD_CLIENT', addClient(JSON.stringify(proclient.value)))
-  Swal.fire('Successful', 'New client saved!', 'success')
+  const url = process.env.VUE_APP_API_URL + '/clients/add'
+  const data = JSON.stringify(proclient.value)
+  console.log('url', url)
+  console.log('data is: ', data)
+  // console.log('we have a problem houston')
+  console.log('onsubmit data', data)
+  // console.log('addclient action', addData(process.env.VUE_APP_API_URL + '/clients/add', JSON.stringify(proclient.value)))
+  const newClient = await addData(url, data)
+  console.log('newclient is now', newClient)
+  await store.dispatch('ADD_CLIENT', newClient)
+  // Swal.fire('Successful', 'New clientresponse saved!', 'success')
   // window.location.reload()
+}
+
+const addProvider = async () => {
+  const anotherProvider = newProvider
+  console.log('addProvider button clicked')
+  console.log('add provider', anotherProvider.value)
 }
 
 // onMounted(async () => {

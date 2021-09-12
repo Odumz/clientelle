@@ -8,7 +8,7 @@ const store = createStore({
     clients: '',
     loading: false,
     open: false,
-    provider: false
+    providers: ''
   }),
   getters: {
     getClients: (state) => {
@@ -28,9 +28,9 @@ const store = createStore({
         return state.open
       })
     },
-    getProviderState: (state) => {
+    getProviders: (state) => {
       return computed(() => {
-        return state.provider
+        return state.providers
       })
     }
   },
@@ -58,8 +58,19 @@ const store = createStore({
     SET_OPEN_STATUS (state, data) {
       state.open = data
     },
-    SET_PROVIDER_STATUS (state, data) {
-      state.provider = data
+    GET_PROVIDERS (state, data) {
+      state.providers = data
+    },
+    SET_PROVIDER (state, data) {
+      state.provider = [...state.providers, data]
+    },
+    DELETE_PROVIDER (state, id) {
+      state.providers = state.providers.filter(provider => provider.id !== id)
+    },
+    UPDATE_PROVIDER (state, providers) {
+      state.providers = state.providers.map(provider => (
+        provider.id === providers.id ? { ...provider, ...providers } : provider
+      ))
     }
   },
   actions: {
@@ -93,8 +104,20 @@ const store = createStore({
     UPDATE_OPEN_STATUS ({ commit }, data) {
       commit('SET_OPEN_STATUS', data)
     },
-    UPDATE_PROVIDER_STATUS ({ commit }, data) {
-      commit('SET_PROVIDER_STATUS', data)
+    FETCH_PROVIDERS ({ commit }, data) {
+      console.log('hello from mr fetch')
+      console.log('provider data from store', data)
+      commit('GET_PROVIDERS', data)
+    },
+    ADD_PROVIDER ({ commit }, provider) {
+      console.log('added provider', provider)
+      commit('SET_PROVIDER', provider)
+    },
+    REMOVE_PROVIDER ({ commit }, provider) {
+      commit('DELETE_PROVIDER', provider)
+    },
+    EDIT_PROVIDER ({ commit }, provider) {
+      commit('UPDATE_PROVIDER', provider)
     }
   }
 })
