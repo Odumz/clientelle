@@ -225,8 +225,8 @@ const deleteProvider = async (id) => {
   // console.log('url', url)
   await removeData(url, id)
   // console.log('removedData', removedData)
-  // const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
-  // await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
   return await store.getters.getProviders.value
 }
 
