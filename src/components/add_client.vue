@@ -96,7 +96,7 @@
                               </div>
                           </div>
                         </div>
-                              {{ proclient.provider }}
+                              <!-- {{ proclient.provider }} -->
                       </form>
                     </div>
                   </div>
@@ -165,7 +165,7 @@ const newProvider = ref({
 
 const provider = computed(() => {
   // console.log('loly')
-  console.log('provider details', store.getters.getProviders.value)
+  // console.log('provider details', store.getters.getProviders.value)
   return store.getters.getProviders.value
 })
 
@@ -178,7 +178,7 @@ const oldProclient = {
 
 const proclient = computed(() => {
   // console.log('loly')
-  console.log('proclients details are here', JSON.stringify(store.getters.getProclients.value))
+  // console.log('proclients details are here', JSON.stringify(store.getters.getProclients.value))
   return store.getters.getProclients.value
 })
 
@@ -195,21 +195,21 @@ const editclient = computed(() => {
 })
 
 const cancelEdit = async () => {
-  console.log('cancel edit')
+  // console.log('cancel edit')
   newProvider.value.name = ''
   store.dispatch('UPDATE_EDITING_STATUS', false)
 }
 
 const onEditClient = async () => {
-  console.log('I am a client edit function')
+  // console.log('I am a client edit function')
   const id = proclient.value._id
   const url = `${process.env.VUE_APP_API_URL}/clients/edit`
-  console.log('url', url)
+  // console.log('url', url)
   // await store.getters.getProclients.value
-  console.log('proclients here in client edit', store.getters.getProclients.value)
-  console.log('proclient data ', proclient.value._id)
-  const newProclient = await editData(url, id, proclient.value)
-  console.log('new proclient in edit function', newProclient)
+  // console.log('proclients here in client edit', store.getters.getProclients.value)
+  // console.log('proclient data ', proclient.value._id)
+  await editData(url, id, proclient.value)
+  // console.log('new proclient in edit function', newProclient)
   // await store.dispatch('UPDATE_PROCLIENT', {})
   await store.dispatch('UPDATE_OPEN_STATUS', false)
   await store.dispatch('UPDATE_EDITING_STATUS', false)
@@ -220,24 +220,24 @@ const onEditClient = async () => {
 }
 
 const deleteProvider = async (id) => {
-  console.log('delete provider', id)
+  // console.log('delete provider', id)
   const url = `${process.env.VUE_APP_API_URL}/providers/delete`
-  console.log('url', url)
-  const removedData = await removeData(url, id)
-  console.log('removedData', removedData)
-  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
-  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  // console.log('url', url)
+  await removeData(url, id)
+  // console.log('removedData', removedData)
+  // const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  // await store.dispatch('FETCH_PROVIDERS', providerData.provider)
   return await store.getters.getProviders.value
 }
 
 const editProvider = async (id) => {
-  console.log('edit provider', id)
+  // console.log('edit provider', id)
   const url = `${process.env.VUE_APP_API_URL}/providers`
-  console.log('url', url)
+  // console.log('url', url)
   const editData = await fetchDataByID(url, id)
-  console.log('editData', editData.provider)
+  // console.log('editData', editData.provider)
   newProvider.value = editData.provider
-  console.log('newProvider from edit', newProvider.value)
+  // console.log('newProvider from edit', newProvider.value)
   await store.dispatch('UPDATE_EDITING_STATUS', true)
   // saveProvider(id, newProvider.value)
   // const payload = JSON.stringify(newProvider.value)
@@ -248,13 +248,13 @@ const editProvider = async (id) => {
 const onSubmit = async () => {
   const url = process.env.VUE_APP_API_URL + '/clients/add'
   const data = JSON.stringify(proclient.value)
-  console.log('url', url)
-  console.log('data is: ', data)
+  // console.log('url', url)
+  // console.log('data is: ', data)
   // console.log('we have a problem houston')
-  console.log('onsubmit data', data)
+  // console.log('onsubmit data', data)
   // console.log('addclient action', addData(process.env.VUE_APP_API_URL + '/clients/add', JSON.stringify(proclient.value)))
   const newClient = await addData(url, data)
-  console.log('newclient is now', newClient)
+  // console.log('newclient is now', newClient)
   // saveProvider()
   await store.dispatch('ADD_CLIENT', newClient)
   await store.dispatch('UPDATE_OPEN_STATUS', false)
@@ -271,12 +271,12 @@ const addProvider = async () => {
   // const data = {
   //   name: newProvider.value
   // }
-  console.log('new value of propro', newProvider.value)
+  // console.log('new value of propro', newProvider.value)
   const data = JSON.stringify(newProvider.value)
-  console.log('addProvider button clicked')
-  console.log('add provider function', data)
+  // console.log('addProvider button clicked')
+  // console.log('add provider function', data)
   const anotherProvider = await addData(url, data)
-  console.log('anotherProvider is now', anotherProvider.provider)
+  // console.log('anotherProvider is now', anotherProvider.provider)
   await store.dispatch('ADD_PROVIDER', anotherProvider.provider)
   const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
@@ -286,13 +286,13 @@ const addProvider = async () => {
 
 const saveProvider = async (id) => {
   const url = process.env.VUE_APP_API_URL + '/providers/edit'
-  console.log('save provider id is :', id)
+  // console.log('save provider id is :', id)
   // console.log('payload', payload)
   const data = JSON.stringify(newProvider.value)
-  console.log('addProvider button clicked')
-  console.log('add provider function', data)
+  // console.log('addProvider button clicked')
+  // console.log('add provider function', data)
   const anotherProvider = await editData(url, id, data)
-  console.log('anotherProvider is now', anotherProvider.provider)
+  // console.log('anotherProvider is now', anotherProvider.provider)
   await store.dispatch('ADD_PROVIDER', anotherProvider.provider)
   const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
@@ -303,7 +303,7 @@ const saveProvider = async (id) => {
 
 onMounted(async () => {
   // const data = await fetchClient()
-  console.log('get proclients result ', store.getters.getProclients.value)
+  // console.log('get proclients result ', store.getters.getProclients.value)
   return await store.getters.getProclients.value
 })
 

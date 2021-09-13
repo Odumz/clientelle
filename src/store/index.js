@@ -68,14 +68,14 @@ const store = createStore({
       // console.log('hi from mutations')
       // console.log('first state', state.clients)
       state.clients = clients
-      console.log('second state', state.clients)
+      // console.log('second state', state.clients)
     },
     SET_CLIENT (state, clients) {
       state.clients = [...state.clients, clients]
     },
     SET_PROCLIENT (state, proclient) {
-      console.log('state.client is ', state.proclients)
-      console.log('proclient is now ', proclient)
+      // console.log('state.client is ', state.proclients)
+      // console.log('proclient is now ', proclient)
       state.proclients = proclient
     },
     DELETE_CLIENT (state, id) {
@@ -105,7 +105,7 @@ const store = createStore({
       state.providers = data
     },
     SET_PROVIDER (state, data) {
-      console.log('new provider data in store: ', data)
+      // console.log('new provider data in store: ', data)
       state.provider = [...state.providers, data]
     },
     DELETE_PROVIDER (state, id) {
@@ -133,7 +133,7 @@ const store = createStore({
       // .then(clients => commit('GET_CLIENTS', clients))
     },
     ADD_CLIENT ({ commit }, client) {
-      console.log('added client', client.client)
+      // console.log('added client', client.client)
       commit('SET_CLIENT', client.client)
     },
     REMOVE_CLIENT ({ commit }, client) {
@@ -149,7 +149,7 @@ const store = createStore({
       commit('SET_OPEN_STATUS', data)
     },
     UPDATE_PROCLIENT ({ commit }, data) {
-      console.log('proclient data from store', data)
+      // console.log('proclient data from store', data)
       commit('SET_PROCLIENT', data)
     },
     UPDATE_TITLE ({ commit }, data) {
@@ -162,12 +162,12 @@ const store = createStore({
       commit('SET_CLIENT_EDITING_STATUS', data)
     },
     FETCH_PROVIDERS ({ commit }, data) {
-      console.log('hello from mr fetch')
-      console.log('provider data from store', data)
+      // console.log('hello from mr fetch')
+      // console.log('provider data from store', data)
       commit('GET_PROVIDERS', data)
     },
     ADD_PROVIDER ({ commit }, provider) {
-      console.log('added provider', provider)
+      // console.log('added provider', provider)
       commit('SET_PROVIDER', provider)
     },
     REMOVE_PROVIDER ({ commit }, provider) {

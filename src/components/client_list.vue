@@ -112,8 +112,8 @@ const store = useStore()
 //   }
 // ]
 const proclients = computed(() => {
-  console.log('loly')
-  console.log('store details', JSON.parse(store.getters.getClients.value))
+  // console.log('loly')
+  // console.log('store details', JSON.parse(store.getters.getClients.value))
   return JSON.parse(store.getters.getClients.value)
 })
 
@@ -126,8 +126,8 @@ onMounted(async () => {
   // }).catch(err => {
   //   console.log(err)
   // })
-  console.log('hi')
-  console.log(store)
+  // console.log('hi')
+  // console.log(store)
   store.dispatch('FETCH_CLIENTS')
 })
 

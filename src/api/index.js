@@ -7,6 +7,7 @@ export const fetchData = async (url) => {
     )
     .catch(error => {
       console.log(error)
+      return error
     })
 }
 
@@ -16,17 +17,18 @@ export const fetchDataByID = async (url, id) => {
     )
     .catch(error => {
       console.log(error)
+      return error
     })
 }
 
 export const addData = async (url, data) => {
   // const newData = JSON.stringify(data)
-  console.log('i am here now')
-  console.log('currently data', data)
+  // console.log('i am here now')
+  // console.log('currently data', data)
   return await axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
     .then(response => {
       // console.log('i am here in processing')
-      console.log('response team', response.data)
+      // console.log('response team', response.data)
       Swal.fire('Successfully', 'added', 'success')
       // setTimeout(() => {
       //   window.location.reload()
@@ -36,6 +38,7 @@ export const addData = async (url, data) => {
     .catch((error) => {
       console.log(error.message)
       Swal.fire('Error', 'missing details', 'error')
+      return error
     })
 }
 
@@ -43,7 +46,7 @@ export const editData = async (url, id, payload) => {
   return await axios.put(`${url}/${id}`, payload, { headers: { 'Content-Type': 'application/json' } })
     .then(
       response => {
-        console.log('response team', response.data)
+        // console.log('response team', response.data)
         Swal.fire('Successfully', 'edited', 'success')
         return response.data
       }
@@ -51,6 +54,7 @@ export const editData = async (url, id, payload) => {
     .catch((error) => {
       console.log(error.message)
       Swal.fire('Error', 'missing details', 'error')
+      return error
     })
 }
 
@@ -58,7 +62,7 @@ export const removeData = async (url, id) => {
   return await axios.delete(`${url}/${id}`)
     .then(
       response => {
-        console.log('response team', response.data)
+        // console.log('response team', response.data)
         Swal.fire('Successfully', 'deleted', 'success')
         return response.data
       }
@@ -66,6 +70,7 @@ export const removeData = async (url, id) => {
     .catch((error) => {
       console.log(error.message)
       Swal.fire('Error', 'missing details', 'error')
+      return error
     })
 }
 
@@ -75,5 +80,6 @@ export const filterData = async () => {
     .catch((error) => {
       console.log(error.message)
       Swal.fire('Error', 'missing details', 'error')
+      return error
     })
 }

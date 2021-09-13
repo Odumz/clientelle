@@ -82,7 +82,7 @@ const store = useStore()
 
 const proclients = computed(() => {
   // console.log('loly')
-  console.log('store details', store.getters.getClients.value)
+  // console.log('store details', store.getters.getClients.value)
   return store.getters.getClients.value
 })
 
@@ -97,23 +97,23 @@ const loadingState = computed(() => {
 // const { fetchData } = api
 
 onMounted(async () => {
-  console.log('hi')
+  // console.log('hi')
   const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  console.log('client', clientData.client)
-  console.log('provider from client', providerData.provider)
+  // console.log('client', clientData.client)
+  // console.log('provider from client', providerData.provider)
   await store.dispatch('FETCH_CLIENTS', clientData.client)
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
 })
 
 const onDelete = async (id) => {
   store.dispatch('UPDATE_LOADING_STATUS', true)
-  console.log('delete')
-  console.log('id is ', id)
+  // console.log('delete')
+  // console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients/delete`
-  console.log('url is ', url)
-  const removedClient = await removeData(url, id)
-  console.log('removedClient is ', removedClient)
+  // console.log('url is ', url)
+  await removeData(url, id)
+  // console.log('removedClient is ', removedClient)
   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
   await store.dispatch('FETCH_CLIENTS', clientData.client)
   store.dispatch('UPDATE_LOADING_STATUS', false)
@@ -122,12 +122,12 @@ const onDelete = async (id) => {
 
 const onEdit = async (id) => {
   store.dispatch('UPDATE_LOADING_STATUS', true)
-  console.log('edit client')
-  console.log('id is ', id)
+  // console.log('edit client')
+  // console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients`
-  console.log('url is ', url)
+  // console.log('url is ', url)
   const editData = await fetchDataByID(url, id)
-  console.log('editData', editData.client)
+  // console.log('editData', editData.client)
   await store.dispatch('UPDATE_PROCLIENT', editData.client)
   await store.dispatch('UPDATE_OPEN_STATUS', true)
   await store.dispatch('UPDATE_TITLE', 'Edit')
@@ -135,12 +135,12 @@ const onEdit = async (id) => {
   // const removedClient = await removeData(url, id)
   // console.log('removedClient is ', removedClient)
   await store.dispatch('UPDATE_LOADING_STATUS', false)
-  console.log('new proclients o: ', store.getters.getProclients.value)
+  // console.log('new proclients o: ', store.getters.getProclients.value)
   return await store.getters.getProclients.value
 }
 
 const onAdd = async () => {
-  console.log('add')
+  // console.log('add')
   store.dispatch('UPDATE_LOADING_STATUS', true)
   store.dispatch('UPDATE_TITLE', 'New')
   // await store.dispatch('UPDATE_PROCLIENT', {})
