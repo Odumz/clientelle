@@ -9,7 +9,15 @@ const store = createStore({
     loading: false,
     open: false,
     isEditing: false,
-    providers: ''
+    clientEditing: false,
+    providers: '',
+    title: '',
+    proclients: {
+      name: '',
+      email: '',
+      phone: '',
+      provider: []
+    }
   }),
   getters: {
     getClients: (state) => {
@@ -34,9 +42,24 @@ const store = createStore({
         return state.providers
       })
     },
+    getTitle: (state) => {
+      return computed(() => {
+        return state.title
+      })
+    },
     getIsEditingStatus: (state) => {
       return computed(() => {
         return state.isEditing
+      })
+    },
+    getClientEditingStatus: (state) => {
+      return computed(() => {
+        return state.clientEditing
+      })
+    },
+    getProclients: (state) => {
+      return computed(() => {
+        return state.proclients
       })
     }
   },
@@ -49,6 +72,11 @@ const store = createStore({
     },
     SET_CLIENT (state, clients) {
       state.clients = [...state.clients, clients]
+    },
+    SET_PROCLIENT (state, proclient) {
+      console.log('state.client is ', state.proclients)
+      console.log('proclient is now ', proclient)
+      state.proclients = proclient
     },
     DELETE_CLIENT (state, id) {
       state.clients = state.clients.filter(client => client.id !== id)
@@ -64,8 +92,14 @@ const store = createStore({
     SET_OPEN_STATUS (state, data) {
       state.open = data
     },
+    SET_TITLE (state, data) {
+      state.title = data
+    },
     SET_EDITING_STATUS (state, data) {
       state.isEditing = data
+    },
+    SET_CLIENT_EDITING_STATUS (state, data) {
+      state.clientEditing = data
     },
     GET_PROVIDERS (state, data) {
       state.providers = data
@@ -114,8 +148,18 @@ const store = createStore({
     UPDATE_OPEN_STATUS ({ commit }, data) {
       commit('SET_OPEN_STATUS', data)
     },
+    UPDATE_PROCLIENT ({ commit }, data) {
+      console.log('proclient data from store', data)
+      commit('SET_PROCLIENT', data)
+    },
+    UPDATE_TITLE ({ commit }, data) {
+      commit('SET_TITLE', data)
+    },
     UPDATE_EDITING_STATUS ({ commit }, data) {
       commit('SET_EDITING_STATUS', data)
+    },
+    UPDATE_CLIENT_EDITING_STATUS ({ commit }, data) {
+      commit('SET_CLIENT_EDITING_STATUS', data)
     },
     FETCH_PROVIDERS ({ commit }, data) {
       console.log('hello from mr fetch')

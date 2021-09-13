@@ -75,7 +75,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
-import { fetchData, removeData } from '../api'
+import { fetchData, removeData, fetchDataByID } from '../api'
 // import Swal from 'sweetalert2'
 
 const store = useStore()
@@ -122,19 +122,28 @@ const onDelete = async (id) => {
 
 const onEdit = async (id) => {
   store.dispatch('UPDATE_LOADING_STATUS', true)
-  console.log('edit')
+  console.log('edit client')
   console.log('id is ', id)
-  const url = `${process.env.VUE_APP_API_URL}/clients/edit`
+  const url = `${process.env.VUE_APP_API_URL}/clients`
   console.log('url is ', url)
+  const editData = await fetchDataByID(url, id)
+  console.log('editData', editData.client)
+  await store.dispatch('UPDATE_PROCLIENT', editData.client)
+  await store.dispatch('UPDATE_OPEN_STATUS', true)
+  await store.dispatch('UPDATE_TITLE', 'Edit')
+  await store.dispatch('UPDATE_CLIENT_EDITING_STATUS', true)
   // const removedClient = await removeData(url, id)
   // console.log('removedClient is ', removedClient)
-  store.dispatch('UPDATE_LOADING_STATUS', false)
-  return await store.getters.getClients.value
+  await store.dispatch('UPDATE_LOADING_STATUS', false)
+  console.log('new proclients o: ', store.getters.getProclients.value)
+  return await store.getters.getProclients.value
 }
 
-const onAdd = () => {
+const onAdd = async () => {
   console.log('add')
   store.dispatch('UPDATE_LOADING_STATUS', true)
+  store.dispatch('UPDATE_TITLE', 'New')
+  // await store.dispatch('UPDATE_PROCLIENT', {})
   store.dispatch('UPDATE_OPEN_STATUS', true)
   store.dispatch('UPDATE_LOADING_STATUS', false)
 }

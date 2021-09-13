@@ -16,7 +16,7 @@
                 <div @keyup.esc="close" class="mt-3 text-center sm:mt-0 sm:text-left">
                   <div class="flex px-5 borderb-2">
                   <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                    New Client
+                    {{ title }} Client
                   </DialogTitle>
                   </div>
                   <hr class="my-3 w-full -ml-10 px-64" />
@@ -40,7 +40,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com">
+                            <input :disabled="editclient" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com">
                           </div>
                         </div>
                         <div class="md:flex md:items-center mb-6">
@@ -88,7 +88,7 @@
                         </div>
                         <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <div v-for="(person, index) in provider" :key="index" class="flex items-center">
-                              <input type="checkbox" :name="person.name" class="mx-3">
+                              <input type="checkbox" :name="person.name" :value="person.name" class="mx-3" v-model="proclient.provider">
                               <label for="provider1" class="w-1/2">{{ person.name }}</label>
                               <div class="flex justify-between">
                                 <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(person._id)" />
@@ -96,7 +96,7 @@
                               </div>
                           </div>
                         </div>
-                              <!-- {{ provider }} -->
+                              {{ proclient.provider }}
                       </form>
                     </div>
                   </div>
@@ -107,8 +107,11 @@
               <button type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="close">
                 Cancel
               </button>
-              <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
+              <button v-if="!editclient" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
                 Add Client
+              </button>
+              <button v-else type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onEditClient">
+                Save Client
               </button>
             </div>
           </div>
@@ -120,7 +123,7 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 // import Swal from 'sweetalert2'
 import { fetchData, addData, removeData, fetchDataByID, editData } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
@@ -132,12 +135,19 @@ const open = computed(() => {
   return store.getters.getOpenState.value
 })
 
+const title = computed(() => {
+  return store.getters.getTitle.value
+})
+
 const editing = computed(() => {
   return store.getters.getIsEditingStatus.value
 })
 
-const close = () => {
+const close = async () => {
   store.dispatch('UPDATE_OPEN_STATUS', false)
+  store.dispatch('UPDATE_CLIENT_EDITING_STATUS', false)
+  store.dispatch('UPDATE_PROCLIENT', oldProclient)
+  // await store.getters.getProclients.value
 }
 
 const newProvider = ref({
@@ -159,17 +169,54 @@ const provider = computed(() => {
   return store.getters.getProviders.value
 })
 
-const proclient = ref({
+const oldProclient = {
   name: '',
   email: '',
   phone: '',
   provider: []
+}
+
+const proclient = computed(() => {
+  // console.log('loly')
+  console.log('proclients details are here', JSON.stringify(store.getters.getProclients.value))
+  return store.getters.getProclients.value
+})
+
+// const proclient = store.getters.getProclients.value
+
+// const clientEdit = computed(() => {
+//   return store.getters.getClientEditingStatus.value
+// ))
+
+const editclient = computed(() => {
+  // console.log('loly')
+  // console.log('provider details', store.getters.getProviders.value)
+  return store.getters.getClientEditingStatus.value
 })
 
 const cancelEdit = async () => {
   console.log('cancel edit')
   newProvider.value.name = ''
   store.dispatch('UPDATE_EDITING_STATUS', false)
+}
+
+const onEditClient = async () => {
+  console.log('I am a client edit function')
+  const id = proclient.value._id
+  const url = `${process.env.VUE_APP_API_URL}/clients/edit`
+  console.log('url', url)
+  // await store.getters.getProclients.value
+  console.log('proclients here in client edit', store.getters.getProclients.value)
+  console.log('proclient data ', proclient.value._id)
+  const newProclient = await editData(url, id, proclient.value)
+  console.log('new proclient in edit function', newProclient)
+  // await store.dispatch('UPDATE_PROCLIENT', {})
+  await store.dispatch('UPDATE_OPEN_STATUS', false)
+  await store.dispatch('UPDATE_EDITING_STATUS', false)
+  await store.dispatch('UPDATE_CLIENT_EDITING_STATUS', false)
+  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  await store.dispatch('FETCH_CLIENTS', clientData.client)
+  return await store.getters.getClients.value
 }
 
 const deleteProvider = async (id) => {
@@ -208,8 +255,12 @@ const onSubmit = async () => {
   // console.log('addclient action', addData(process.env.VUE_APP_API_URL + '/clients/add', JSON.stringify(proclient.value)))
   const newClient = await addData(url, data)
   console.log('newclient is now', newClient)
-  saveProvider()
+  // saveProvider()
   await store.dispatch('ADD_CLIENT', newClient)
+  await store.dispatch('UPDATE_OPEN_STATUS', false)
+  await store.dispatch('UPDATE_PROCLIENT', oldProclient)
+  await store.getters.getProclients.value
+  // proclient.value = {}
   // Swal.fire('Successful', 'New clientresponse saved!', 'success')
   // window.location.reload()
 }
@@ -250,10 +301,11 @@ const saveProvider = async (id) => {
   return await store.getters.getProviders.value
 }
 
-// onMounted(async () => {
-//   const data = await fetchClient()
-//   await store.dispatch('FETCH_CLIENTS', data)
-// })
+onMounted(async () => {
+  // const data = await fetchClient()
+  console.log('get proclients result ', store.getters.getProclients.value)
+  return await store.getters.getProclients.value
+})
 
 // const hideProvider = () => {
 //   console.log('hello')
