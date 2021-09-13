@@ -1,4 +1,4 @@
-# Protranslating Clients
+# Clientelle
 Practical test for fullstack javascript developer with experience in Vue, Node.js, Express, MongoDB, and Swagger.
 
 ## Project setup

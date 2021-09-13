@@ -64,8 +64,8 @@
                               <input v-model="newProvider.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
                               <Icon v-if="editing" icon="akar-icons:circle-x" class="m-3" @click.prevent="cancelEdit" />
                             </div>
-                            <div class="md:w-full col-span-1">
-                              <button v-if="!editing" type="button" class="mt-3 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
+                            <div class="w-full col-span-1 md:mt-0 mt-2">
+                              <button v-if="!editing" type="button" class="mt-3 inline-flex bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
                                 Add Provider
                               </button>
                               <div class="relative px-1" v-else>
@@ -87,12 +87,12 @@
                           </div>
                         </div>
                         <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
-                          <div v-for="(person, index) in provider" :key="index" class="flex items-center">
-                              <input type="checkbox" :name="person.name" :value="person.name" class="mx-3" v-model="proclient.provider">
-                              <label for="provider1" class="w-1/2">{{ person.name }}</label>
+                          <div v-for="(cprovider, index) in provider" :key="index" class="flex items-center">
+                              <input type="checkbox" :name="cprovider.name" :value="cprovider.name" class="mx-3" v-model="proclient.provider">
+                              <label for="provider1" class="w-1/2">{{ cprovider.name }}</label>
                               <div class="flex justify-between">
-                                <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(person._id)" />
-                                <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(person._id)" />
+                                <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(cprovider._id)" />
+                                <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(cprovider._id)" />
                               </div>
                           </div>
                         </div>
@@ -103,15 +103,21 @@
                 </div>
               </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="close">
-                Cancel
-              </button>
-              <button v-if="!editclient" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse flex-col-reverse">
+              <!-- <button v-if="editclient" type="button" class="mb-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onDelete(proclient._id)">
+                Delete Client
+              </button> -->
+              <button v-if="!editclient" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
                 Add Client
               </button>
-              <button v-else type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onEditClient">
+              <button v-else type="button" class="sm:my-0 my-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onEditClient">
                 Save Client
+              </button>
+              <button type="button" class="sm:my-0 mt-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="close">
+                Cancel
+              </button>
+              <button v-if="editclient" type="button" class="sm:my-0 my-4 w-full mr-28 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onDelete(proclient._id)">
+                Delete Client
               </button>
             </div>
           </div>
@@ -124,7 +130,6 @@
 <script setup>
 import { useStore } from 'vuex'
 import { computed, ref, onMounted } from 'vue'
-// import Swal from 'sweetalert2'
 import { fetchData, addData, removeData, fetchDataByID, editData } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { Icon } from '@iconify/vue'
@@ -147,20 +152,25 @@ const close = async () => {
   store.dispatch('UPDATE_OPEN_STATUS', false)
   store.dispatch('UPDATE_CLIENT_EDITING_STATUS', false)
   store.dispatch('UPDATE_PROCLIENT', oldProclient)
-  // await store.getters.getProclients.value
 }
 
 const newProvider = ref({
   name: ''
 })
 
-// const provider = computed(() => {
-//   return store.getters.getProviderState.value
-// })
-
-// const showProvider = () => {
-//   console.log('hi')
-//   store.dispatch('UPDATE_PROVIDER_STATUS', true)
+// const onDelete = async (id) => {
+//   store.dispatch('UPDATE_LOADING_STATUS', true)
+//   // console.log('delete')
+//   // console.log('id is ', id)
+//   const url = `${process.env.VUE_APP_API_URL}/clients/delete`
+//   // console.log('url is ', url)
+//   await removeData(url, id)
+//   // console.log('removedClient is ', removedClient)
+//   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+//   await store.dispatch('FETCH_CLIENTS', clientData.client)
+//   store.dispatch('UPDATE_LOADING_STATUS', false)
+//   store.dispatch('UPDATE_OPEN_STATUS', false)
+//   return await store.getters.getClients.value
 // }
 
 const provider = computed(() => {
@@ -181,12 +191,6 @@ const proclient = computed(() => {
   // console.log('proclients details are here', JSON.stringify(store.getters.getProclients.value))
   return store.getters.getProclients.value
 })
-
-// const proclient = store.getters.getProclients.value
-
-// const clientEdit = computed(() => {
-//   return store.getters.getClientEditingStatus.value
-// ))
 
 const editclient = computed(() => {
   // console.log('loly')

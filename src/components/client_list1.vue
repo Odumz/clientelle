@@ -10,7 +10,7 @@
             </h1>
             <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
           </div>
-          <table class="min-w-full divide-y divide-gray-200">
+          <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
             <thead class="bg-gray-50">
               <tr>
                 <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
@@ -65,6 +65,31 @@
             </tbody>
           </table>
           <div>
+            <div v-for="(person, index) in proclients" :key="index" class="min-w-full flex border justify-center lg:hidden">
+              <div class="text-left py-5 w-3/4">
+                <div>
+                  Name: {{ person.name }}
+                </div>
+                <div>
+                  Email: {{ person.email }}
+                </div>
+                <div>
+                  Phone: {{ person.phone }}
+                </div>
+                <div>
+                  Provider:
+                  <span v-for="provider in person.provider" :key="provider.id">
+                    {{ provider }},
+                  </span>
+                </div>
+              </div>
+              <div class="py-5 grid items-center justify-items-center">
+                <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="onEdit(person._id)" />
+                <Icon icon="fluent:delete-24-filled" @click.prevent="onDelete(person._id)" />
+              </div>
+            </div>
+          </div>
+          <div>
           </div>
         </div>
       </div>
@@ -76,7 +101,7 @@
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
 import { fetchData, removeData, fetchDataByID } from '../api'
-// import Swal from 'sweetalert2'
+import { Icon } from '@iconify/vue'
 
 const store = useStore()
 
@@ -86,15 +111,9 @@ const proclients = computed(() => {
   return store.getters.getClients.value
 })
 
-// const open = computed(() => {
-//   return store.getters.getOpenState
-// })
-
 const loadingState = computed(() => {
   return store.getters.getLoadingState.value
 })
-
-// const { fetchData } = api
 
 onMounted(async () => {
   // console.log('hi')
