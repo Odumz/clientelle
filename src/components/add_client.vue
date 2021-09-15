@@ -4,7 +4,7 @@
     <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="open = false">
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
-          <DialogOverlay @click.prevent="close" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <DialogOverlay @click.prevent="close(); cancelEdit();" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
@@ -13,7 +13,7 @@
           <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div class="sm:flex sm:items-start">
-                <div @keyup.esc="close" class="mt-3 text-center sm:mt-0 sm:text-left">
+                <div @keyup.esc="close(); cancelEdit();" class="mt-3 text-center sm:mt-0 sm:text-left">
                   <div class="flex px-5 borderb-2">
                   <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
                     {{ title }} Client
@@ -88,12 +88,16 @@
                         </div>
                         <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <div v-for="(cprovider, index) in provider" :key="index" class="flex items-center">
-                              <input type="checkbox" :name="cprovider.name" :value="cprovider.name" class="mx-3" v-model="proclient.provider">
-                              <label for="provider1" class="w-1/2">{{ cprovider.name }}</label>
+                            <!-- <div v-for="(proprovider, index) in proclient.provider" :key="index" class="flex items-center"> -->
+                              <input type="checkbox" :id="cprovider._id" :name="cprovider._id" :value="cprovider" class="mx-3" v-model="proclient.provider">
+                              <label :for="cprovider._id" class="w-1/2">{{ cprovider.name }}</label>
+                              <!-- {{ proclient.provider[index] }} -->
+                              <!-- {{ cprovider }} -->
                               <div class="flex justify-between">
                                 <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(cprovider._id)" />
                                 <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(cprovider._id)" />
                               </div>
+                            <!-- </div> -->
                           </div>
                         </div>
                               <!-- {{ proclient.provider }} -->
@@ -104,9 +108,6 @@
               </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse flex-col-reverse">
-              <!-- <button v-if="editclient" type="button" class="mb-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onDelete(proclient._id)">
-                Delete Client
-              </button> -->
               <button v-if="!editclient" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
                 Add Client
               </button>
@@ -158,20 +159,23 @@ const newProvider = ref({
   name: ''
 })
 
-// const onDelete = async (id) => {
-//   store.dispatch('UPDATE_LOADING_STATUS', true)
-//   // console.log('delete')
-//   // console.log('id is ', id)
-//   const url = `${process.env.VUE_APP_API_URL}/clients/delete`
-//   // console.log('url is ', url)
-//   await removeData(url, id)
-//   // console.log('removedClient is ', removedClient)
-//   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-//   await store.dispatch('FETCH_CLIENTS', clientData.client)
-//   store.dispatch('UPDATE_LOADING_STATUS', false)
-//   store.dispatch('UPDATE_OPEN_STATUS', false)
-//   return await store.getters.getClients.value
-// }
+const onDelete = async (id) => {
+  store.dispatch('UPDATE_LOADING_STATUS', true)
+  // console.log('delete')
+  // console.log('id is ', id)
+  const url = `${process.env.VUE_APP_API_URL}/clients/delete`
+  // console.log('url is ', url)
+  await removeData(url, id)
+  // console.log('removedClient is ', removedClient)
+  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  await store.dispatch('FETCH_CLIENTS', clientData.client)
+  await store.dispatch('UPDATE_OPEN_STATUS', false)
+  store.dispatch('UPDATE_LOADING_STATUS', false)
+  setTimeout(() => {
+    store.dispatch('UPDATE_PROCLIENT', oldProclient)
+  }, 500)
+  await store.getters.getClients.value
+}
 
 const provider = computed(() => {
   // console.log('loly')
@@ -261,9 +265,15 @@ const onSubmit = async () => {
   // console.log('newclient is now', newClient)
   // saveProvider()
   await store.dispatch('ADD_CLIENT', newClient)
-  await store.dispatch('UPDATE_OPEN_STATUS', false)
-  await store.dispatch('UPDATE_PROCLIENT', oldProclient)
   await store.getters.getProclients.value
+  await store.dispatch('UPDATE_OPEN_STATUS', false)
+  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  await store.dispatch('FETCH_CLIENTS', clientData.client)
+  setTimeout(() => {
+    store.dispatch('UPDATE_PROCLIENT', oldProclient)
+  }, 500)
+  // await store.getters.getProclients.value
+  console.log('something interesting', store.getters.getProclients.value)
   // proclient.value = {}
   // Swal.fire('Successful', 'New clientresponse saved!', 'success')
   // window.location.reload()
@@ -297,17 +307,26 @@ const saveProvider = async (id) => {
   // console.log('add provider function', data)
   const anotherProvider = await editData(url, id, data)
   // console.log('anotherProvider is now', anotherProvider.provider)
-  await store.dispatch('ADD_PROVIDER', anotherProvider.provider)
+  await store.dispatch('EDIT_PROVIDER', anotherProvider.provider)
   const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  // const clientelle = await fetchData(process.env.VUE_APP_API_URL + '/clients')
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  // await store.dispatch('FETCH_CLIENTS', clientelle.client)
+  console.log('provider saved', store.getters.getProviders.value)
   await store.dispatch('UPDATE_EDITING_STATUS', false)
   newProvider.value.name = ''
-  return await store.getters.getProviders.value
+  const newproclientelle = await store.getters.getProclients.value
+  const newclientpro = await store.getters.getProviders.value
+  return {
+    newproclientelle,
+    newclientpro
+  }
 }
 
 onMounted(async () => {
   // const data = await fetchClient()
   // console.log('get proclients result ', store.getters.getProclients.value)
+  await store.getters.getProviders.value
   return await store.getters.getProclients.value
 })
 

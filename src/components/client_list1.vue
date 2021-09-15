@@ -52,7 +52,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span v-for="provider in person.provider" :key="provider.id" class="px-2 inline-flex leading-5 rounded-full">
-                    {{ provider }},
+                    {{ provider.name }},
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -79,7 +79,7 @@
                 <div>
                   Provider:
                   <span v-for="provider in person.provider" :key="provider.id">
-                    {{ provider }},
+                    {{ provider.name }},
                   </span>
                 </div>
               </div>
@@ -107,7 +107,7 @@ const store = useStore()
 
 const proclients = computed(() => {
   // console.log('loly')
-  // console.log('store details', store.getters.getClients.value)
+  console.log('store details', store.getters.getClients.value)
   return store.getters.getClients.value
 })
 
@@ -141,12 +141,13 @@ const onDelete = async (id) => {
 
 const onEdit = async (id) => {
   store.dispatch('UPDATE_LOADING_STATUS', true)
-  // console.log('edit client')
+  console.log('edit client')
   // console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients`
   // console.log('url is ', url)
   const editData = await fetchDataByID(url, id)
-  // console.log('editData', editData.client)
+  console.log('editData', editData.client.provider)
+  console.log('editData', editData.client)
   await store.dispatch('UPDATE_PROCLIENT', editData.client)
   await store.dispatch('UPDATE_OPEN_STATUS', true)
   await store.dispatch('UPDATE_TITLE', 'Edit')

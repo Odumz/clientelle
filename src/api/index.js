@@ -2,7 +2,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 
 export const fetchData = async (url) => {
-  return await axios.get(url)
+  return await axios.get(url, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     .then(response => response.data
     )
     .catch(error => {
@@ -12,7 +12,7 @@ export const fetchData = async (url) => {
 }
 
 export const fetchDataByID = async (url, id) => {
-  return await axios.get(`${url}/${id}`)
+  return await axios.get(`${url}/${id}`, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     .then(response => response.data
     )
     .catch(error => {
@@ -25,7 +25,7 @@ export const addData = async (url, data) => {
   // const newData = JSON.stringify(data)
   // console.log('i am here now')
   // console.log('currently data', data)
-  return await axios.post(url, data, { headers: { 'Content-Type': 'application/json' } })
+  return await axios.post(url, data, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     .then(response => {
       // console.log('i am here in processing')
       // console.log('response team', response.data)
@@ -43,7 +43,7 @@ export const addData = async (url, data) => {
 }
 
 export const editData = async (url, id, payload) => {
-  return await axios.put(`${url}/${id}`, payload, { headers: { 'Content-Type': 'application/json' } })
+  return await axios.put(`${url}/${id}`, payload, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     .then(
       response => {
         // console.log('response team', response.data)
@@ -59,7 +59,7 @@ export const editData = async (url, id, payload) => {
 }
 
 export const removeData = async (url, id) => {
-  return await axios.delete(`${url}/${id}`)
+  return await axios.delete(`${url}/${id}`, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     .then(
       response => {
         // console.log('response team', response.data)
