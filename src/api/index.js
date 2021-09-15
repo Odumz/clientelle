@@ -36,7 +36,7 @@ export const addData = async (url, data) => {
       return response.data
     })
     .catch((error) => {
-      console.log(error.message)
+      console.log('add data error', error.message)
       Swal.fire('Error', 'missing details', 'error')
       return error
     })

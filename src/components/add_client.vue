@@ -256,28 +256,29 @@ const editProvider = async (id) => {
 const onSubmit = async () => {
   const url = process.env.VUE_APP_API_URL + '/clients/add'
   const data = JSON.stringify(proclient.value)
-  console.log('url', url)
+  // console.log('url', url)
   // console.log('data is: ', data)
   // console.log('we have a problem houston')
   // console.log('onsubmit data', data)
   // console.log('addclient action', addData(process.env.VUE_APP_API_URL + '/clients/add', JSON.stringify(proclient.value)))
-  const newClient = await addData(url, data)
-  console.log('newclient is now', newClient)
+  // const newClient = await addData(url, data)
+  await addData(url, data)
+  // console.log('newclient is now', newClient)
   // saveProvider()
-  await store.dispatch('ADD_CLIENT', newClient.client)
-  console.log('i passed')
+  // await store.dispatch('ADD_CLIENT', newClient.client)
+  // console.log('i passed')
   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  console.log('this very')
+  // console.log('this very')
   await store.dispatch('FETCH_CLIENTS', clientData.client)
-  console.log('point in')
+  // console.log('point in')
   await store.getters.getProclients.value
-  console.log('this code')
+  // console.log('this code')
   await store.dispatch('UPDATE_OPEN_STATUS', false)
   setTimeout(() => {
     store.dispatch('UPDATE_PROCLIENT', oldProclient)
   }, 500)
   // await store.getters.getProclients.value
-  console.log('something interesting', store.getters.getProclients.value)
+  // console.log('something interesting', store.getters.getProclients.value)
   // proclient.value = {}
   // Swal.fire('Successful', 'New clientresponse saved!', 'success')
   // window.location.reload()

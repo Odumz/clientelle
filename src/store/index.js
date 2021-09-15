@@ -71,6 +71,8 @@ const store = createStore({
       // console.log('second state', state.clients)
     },
     SET_CLIENT (state, clients) {
+      console.log('set clients ', clients)
+      console.log('state clients ', state.clients)
       state.clients = [...state.clients, clients]
     },
     SET_PROCLIENT (state, proclient) {
@@ -134,7 +136,8 @@ const store = createStore({
     },
     ADD_CLIENT ({ commit }, client) {
       console.log('added client', client)
-      commit('SET_CLIENT', client)
+      const newclient = JSON.stringify(client)
+      commit('SET_CLIENT', newclient)
     },
     REMOVE_CLIENT ({ commit }, client) {
       commit('DELETE_CLIENT', client)
