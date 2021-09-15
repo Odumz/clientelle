@@ -3,13 +3,13 @@
   <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+        <div class="flex py-5 justify-between items-center pl-14 pr-12 bg-gray-100">
+          <h1 class="text-2xl text-blue-500 font-bold">
+            Clients
+          </h1>
+          <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
+        </div>
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-          <div class="flex py-5 justify-between items-center pl-14 pr-12 bg-gray-100">
-            <h1 class="text-2xl text-blue-500 font-bold">
-              Clients
-            </h1>
-            <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
-          </div>
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
             <thead class="bg-gray-50">
               <tr>
@@ -32,8 +32,8 @@
                 </th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="(person, index) in proclients" :key="index" class="hover:bg-gray-50">
+            <tbody v-if="proclients" class="bg-white divide-y divide-gray-200">
+              <tr v-for="(person) in proclients" :key="person._id" class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
                     <div class="ml-4">
@@ -64,7 +64,7 @@
               </tr>
             </tbody>
           </table>
-          <div>
+          <div v-if="proclients">
             <div v-for="(person, index) in proclients" :key="index" class="min-w-full flex border justify-center lg:hidden">
               <div class="text-left py-5 w-3/4">
                 <div>
@@ -89,6 +89,9 @@
               </div>
             </div>
           </div>
+          <div v-else>
+            <empty-list @addClient="onAdd" />
+          </div>
           <div>
           </div>
         </div>
@@ -101,6 +104,7 @@
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
 import { fetchData, removeData, fetchDataByID } from '../api'
+import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
 
 const store = useStore()
@@ -119,7 +123,7 @@ onMounted(async () => {
   // console.log('hi')
   const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
   const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // console.log('client', clientData.client)
+  console.log('client', clientData.client)
   // console.log('provider from client', providerData.provider)
   await store.dispatch('FETCH_CLIENTS', clientData.client)
   await store.dispatch('FETCH_PROVIDERS', providerData.provider)
@@ -163,7 +167,6 @@ const onAdd = async () => {
   // console.log('add')
   store.dispatch('UPDATE_LOADING_STATUS', true)
   store.dispatch('UPDATE_TITLE', 'New')
-  // await store.dispatch('UPDATE_PROCLIENT', {})
   store.dispatch('UPDATE_OPEN_STATUS', true)
   store.dispatch('UPDATE_LOADING_STATUS', false)
 }

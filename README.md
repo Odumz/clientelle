@@ -26,4 +26,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Project links
 - [GitHub](https://github.com/Odumz/protranslating_clients.git)
-- [Demo]()
+- [Demo](https://clientelle.vercel.app)

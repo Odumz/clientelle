@@ -133,8 +133,8 @@ const store = createStore({
       // .then(clients => commit('GET_CLIENTS', clients))
     },
     ADD_CLIENT ({ commit }, client) {
-      // console.log('added client', client.client)
-      commit('SET_CLIENT', client.client)
+      console.log('added client', client)
+      commit('SET_CLIENT', client)
     },
     REMOVE_CLIENT ({ commit }, client) {
       commit('DELETE_CLIENT', client)
