@@ -32,7 +32,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody v-if="proclients" class="bg-white divide-y divide-gray-200">
+            <tbody v-if="proclients.length > 0" class="bg-white divide-y divide-gray-200">
               <tr v-for="(person) in proclients" :key="person._id" class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -64,7 +64,7 @@
               </tr>
             </tbody>
           </table>
-          <div v-if="proclients">
+          <div v-if="proclients.length > 0">
             <div v-for="(person, index) in proclients" :key="index" class="min-w-full flex border justify-center lg:hidden">
               <div class="text-left py-5 w-3/4">
                 <div>
@@ -78,7 +78,7 @@
                 </div>
                 <div>
                   Provider:
-                  <span v-for="provider in person.provider" :key="provider.id">
+                  <span v-for="provider in person.provider" :key="provider._id">
                     {{ provider.name }},
                   </span>
                 </div>
@@ -103,11 +103,13 @@
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
-import { fetchData, removeData, fetchDataByID } from '../api'
+import { fetchDataByID } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
+import * as actionTypes from '../store/constants/actions'
 
 const store = useStore()
+console.log('store here  is', store)
 
 const proclients = computed(() => {
   // console.log('loly')
@@ -115,59 +117,60 @@ const proclients = computed(() => {
   return store.getters.getClients.value
 })
 
-const loadingState = computed(() => {
-  return store.getters.getLoadingState.value
-})
+const loadingState = computed(() => store.getters.getLoadingState.value)
 
 onMounted(async () => {
-  // console.log('hi')
-  const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
-  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  console.log('client', clientData.client)
+  // console.log('store is', store)
+  // const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
+  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  // console.log('client', clientData.client)
   // console.log('provider from client', providerData.provider)
-  await store.dispatch('FETCH_CLIENTS', clientData.client)
-  await store.dispatch('FETCH_PROVIDERS', providerData.provider)
+  console.log('I have')
+  await store.dispatch(actionTypes.FetchClients)
+  console.log('just gotten')
+  await store.dispatch(actionTypes.FetchProviders)
+  console.log('here oh')
 })
 
 const onDelete = async (id) => {
-  store.dispatch('UPDATE_LOADING_STATUS', true)
+  store.dispatch(actionTypes.UpdateLoadingStatus, true)
   // console.log('delete')
-  // console.log('id is ', id)
-  const url = `${process.env.VUE_APP_API_URL}/clients/delete`
+  console.log('id is ', id)
+  const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
+  await store.dispatch(actionTypes.RemoveClient, url)
   // console.log('url is ', url)
-  await removeData(url, id)
   // console.log('removedClient is ', removedClient)
-  const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  await store.dispatch('FETCH_CLIENTS', clientData.client)
-  store.dispatch('UPDATE_LOADING_STATUS', false)
-  return await store.getters.getClients.value
+  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
+  // await store.dispatch(actionTypes.FetchClients, clientData.client)
+  store.dispatch(actionTypes.UpdateLoadingStatus, false)
+  // return await store.getters.getClients.value
 }
 
 const onEdit = async (id) => {
-  store.dispatch('UPDATE_LOADING_STATUS', true)
-  console.log('edit client')
-  // console.log('id is ', id)
-  const url = `${process.env.VUE_APP_API_URL}/clients`
+  store.dispatch(actionTypes.UpdateLoadingStatus, true)
+  // console.log('edit client')
+  console.log('id is ', id)
+  const url = `${process.env.VUE_APP_API_URL}/clients/${id}`
   // console.log('url is ', url)
-  const editData = await fetchDataByID(url, id)
-  console.log('editData', editData.client.provider)
+  const editData = await fetchDataByID(url)
+  // console.log('editData', editData.client.provider)
   console.log('editData', editData.client)
-  await store.dispatch('UPDATE_PROCLIENT', editData.client)
-  await store.dispatch('UPDATE_OPEN_STATUS', true)
-  await store.dispatch('UPDATE_TITLE', 'Edit')
-  await store.dispatch('UPDATE_CLIENT_EDITING_STATUS', true)
+  await store.dispatch(actionTypes.UpdateProclient, editData.client)
+  await store.dispatch(actionTypes.UpdateTitle, 'Edit')
+  await store.dispatch(actionTypes.UpdateOpenStatus, true)
+  await store.dispatch(actionTypes.UpdateClientEditingStatus, true)
   // const removedClient = await removeData(url, id)
   // console.log('removedClient is ', removedClient)
-  await store.dispatch('UPDATE_LOADING_STATUS', false)
+  await store.dispatch(actionTypes.UpdateLoadingStatus, false)
   // console.log('new proclients o: ', store.getters.getProclients.value)
-  return await store.getters.getProclients.value
+  // return await store.getters.getProclients.value
 }
 
 const onAdd = async () => {
   // console.log('add')
-  store.dispatch('UPDATE_LOADING_STATUS', true)
-  store.dispatch('UPDATE_TITLE', 'New')
-  store.dispatch('UPDATE_OPEN_STATUS', true)
-  store.dispatch('UPDATE_LOADING_STATUS', false)
+  store.dispatch(actionTypes.UpdateLoadingStatus, true)
+  store.dispatch(actionTypes.UpdateTitle, 'New')
+  store.dispatch(actionTypes.UpdateOpenStatus, true)
+  store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 </script>
