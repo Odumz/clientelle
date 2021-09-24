@@ -3,7 +3,7 @@ import * as mutationTypes from '../constants/mutations'
 import * as actionTypes from '../constants/actions'
 // import axios from 'axios'
 // import { fetchData, fetchDataByID, addData, editData, removeData } from '../api'
-import { addData, fetchData, removeData } from '../../api'
+import { addData, fetchData, editData, removeData } from '../../api'
 
 export default {
   state: () => ({
@@ -85,8 +85,21 @@ export default {
       await dispatch(actionTypes.FetchClients)
     },
     async [actionTypes.EditClient] ({ dispatch, commit }, payload) {
-      const client = ''
-      await commit(mutationTypes.UpdateClient, client)
+      const url = `${process.env.VUE_APP_API_URL}/clients/edit/${payload._id}`
+      console.log('payload in store', payload)
+      const { _id, email, ...rest } = payload
+      // const data = {
+      //   name: payload.name,
+      //   phone: payload.phone,
+      //   provider: payload.provider
+      // }
+      console.log('rest is ', rest)
+      const updatedClient = await editData(url, rest)
+      console.log('updatedClient', updatedClient)
+      await dispatch(actionTypes.UpdateOpenStatus, false)
+      await dispatch(actionTypes.UpdateEditingStatus, false)
+      await dispatch(actionTypes.UpdateClientEditingStatus, false)
+      await commit(mutationTypes.UpdateClient, payload._id)
       await dispatch(actionTypes.FetchClients)
     },
     async [actionTypes.UpdateProclient] ({ commit }, data) {

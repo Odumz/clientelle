@@ -34,7 +34,13 @@ export const addData = async (url, data) => {
     .then(response => {
       // console.log('i am here in processing')
       // console.log('response team', response.data)
-      Swal.fire('Successfully', 'added', 'success')
+      Swal.fire({
+        title: 'Successful!',
+        text: 'New data added',
+        timer: 1500,
+        icon: 'success'
+      })
+      // Swal.fire('Successfully', 'added', 'success')
       // setTimeout(() => {
       //   window.location.reload()
       // }, 2500)
@@ -43,9 +49,21 @@ export const addData = async (url, data) => {
     .catch((error) => {
       console.log('add data error', error.message)
       if (error.message.includes('409')) {
-        Swal.fire('Error', 'Duplicate data submitted', 'error')
+        // Swal.fire('Error', 'Duplicate data submitted', 'error')
+        Swal.fire({
+          title: 'Error!',
+          text: 'Duplicate data submitted',
+          timer: 1500,
+          icon: 'error'
+        })
       } else if (error.message.includes('400')) {
-        Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
+        // Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
+        Swal.fire({
+          title: 'Error!',
+          text: 'Invalid/Incomplete data submitted',
+          timer: 1500,
+          icon: 'error'
+        })
       }
       // Swal.fire('Error', error.message, 'error')
       // return error
@@ -55,35 +73,59 @@ export const addData = async (url, data) => {
 export const editData = async (url, payload) => {
   console.log('url is ', url)
   console.log('payload is ', payload)
-  return await axios.put(`${url}`, payload, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
+  return await axios.put(url, payload)
     .then(
       response => {
         console.log('response team', response.data)
-        Swal.fire('Successfully', 'edited', 'success')
+        // Swal.fire('Successfully', 'edited', 'success')
+        Swal.fire({
+          title: 'Successful!',
+          text: 'Data has been updated',
+          timer: 1500,
+          icon: 'success'
+        })
         return response.data
       }
     )
     .catch((error) => {
       console.log(error.message)
       if (error.message.includes('400')) {
-        Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
+        // Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
+        Swal.fire({
+          title: 'Error!',
+          text: 'Invalid/Incomplete data submitted',
+          timer: 1500,
+          icon: 'error'
+        })
       }
     })
 }
 
 export const removeData = async (url) => {
-  return await axios.delete(`${url}`, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
+  return await axios.delete(`${url}`)
     .then(
       response => {
         // console.log('response team', response.data)
-        Swal.fire('Successfully', 'deleted', 'success')
+        // Swal.fire('Successfully', 'deleted', 'success')
+        Swal.fire({
+          title: 'Successful!',
+          text: 'Data has been deleted',
+          timer: 1500,
+          icon: 'success'
+        })
         return response.data
       }
     )
     .catch((error) => {
       console.log(error.message)
       if (error.message.includes('400')) {
-        Swal.fire('Error', 'Invalid/Incomplete id submitted', 'error')
+        // Swal.fire('Error', 'Invalid/Incomplete id submitted', 'error')
+        Swal.fire({
+          title: 'Error!',
+          text: 'Invalid/Incomplete data submitted',
+          timer: 1500,
+          icon: 'error'
+        })
       }
     })
 }
@@ -93,7 +135,13 @@ export const filterData = async () => {
     .then()
     .catch((error) => {
       console.log(error.message)
-      Swal.fire('Error', 'missing details', 'error')
+      // Swal.fire('Error', 'missing details', 'error')
+      Swal.fire({
+        title: 'Error!',
+        text: 'Invalid/Incomplete data submitted',
+        timer: 1500,
+        icon: 'error'
+      })
       return error
     })
 }

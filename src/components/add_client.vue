@@ -174,6 +174,10 @@ const onDelete = async (id) => {
   // store.dispatch(actionTypes.UpdateLoadingStatus, false)
   // return await store.getters.getClients.value
 
+  console.log('id is ', id)
+  const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
+  await store.dispatch(actionTypes.RemoveClient, url)
+
   // store.dispatch(actionTypes.UpdateLoadingStatus, true)
   // console.log('delete')
   // console.log('id is ', id)
@@ -182,13 +186,13 @@ const onDelete = async (id) => {
   // await removeData(url, id)
   // console.log('removedClient is ', removedClient)
   // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  await store.dispatch(actionTypes.FetchClients)
+  // await store.dispatch(actionTypes.FetchClients)
   await store.dispatch(actionTypes.UpdateOpenStatus, false)
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
   setTimeout(() => {
     store.dispatch(actionTypes.UpdateProclient, oldProclient)
   }, 500)
-  await store.getters.getClients.value
+  // await store.getters.getClients.value
 }
 
 const provider = computed(() => {
@@ -218,20 +222,23 @@ const cancelEdit = async () => {
 const onEditClient = async () => {
   // console.log('I am a client edit function')
   // const id = proclient.value._id
-  // const url = `${process.env.VUE_APP_API_URL}/clients/edit`
+  // const url = `${process.env.VUE_APP_API_URL}/clients/edit/${id}`
   // console.log('url', url)
+  console.log('proclient is ', JSON.parse(JSON.stringify(proclient.value)))
+  const proclientelle = JSON.parse(JSON.stringify(proclient.value))
+  await store.dispatch(actionTypes.EditClient, proclientelle)
   // await store.getters.getProclients.value
   // console.log('proclients here in client edit', store.getters.getProclients.value)
   // console.log('proclient data ', proclient.value._id)
   // await editData(url, id, proclient.value)
   // console.log('new proclient in edit function', newProclient)
-  // await store.dispatch(actionTypes.UpdateProclient, {})
-  await store.dispatch(actionTypes.UpdateOpenStatus, false)
-  await store.dispatch(actionTypes.UpdateEditingStatus, false)
-  await store.dispatch(actionTypes.UpdateClientEditingStatus, false)
+  // // await store.dispatch(actionTypes.UpdateProclient, {})
+  // await store.dispatch(actionTypes.UpdateOpenStatus, false)
+  // await store.dispatch(actionTypes.UpdateEditingStatus, false)
+  // await store.dispatch(actionTypes.UpdateClientEditingStatus, false)
   // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
   // await store.dispatch(actionTypes.FetchClients, clientData.client)
-  return await store.getters.getClients.value
+  // return await store.getters.getClients.value
 }
 
 const deleteProvider = async (id) => {
@@ -320,7 +327,7 @@ const addProvider = async () => {
   return await store.getters.getProviders.value
 }
 
-const saveProvider = async (id) => {
+const saveProvider = async () => {
   // const url = process.env.VUE_APP_API_URL + '/providers/edit'
   // console.log('save provider id is :', id)
   // console.log('payload', payload)
@@ -337,6 +344,8 @@ const saveProvider = async (id) => {
   // console.log('provider saved', store.getters.getProviders.value)
   await store.dispatch(actionTypes.UpdateEditingStatus, false)
   newProvider.value.name = ''
+  await store.dispatch(actionTypes.FetchProviders)
+  await store.dispatch(actionTypes.FetchClients)
   // const newproclientelle = await store.getters.getProclients.value
   // const newclientpro = await store.getters.getProviders.value
   // return {

@@ -43,7 +43,11 @@ export default {
     },
     async [actionTypes.AddProvider] ({ dispatch, commit }, payload) {
       console.log('added provider', payload)
-      const newprovider = await addData(payload.url, payload.data)
+      const data = {
+        name: payload.data.name
+      }
+      console.log('data is now ', data)
+      const newprovider = await addData(payload.url, data)
       await commit(mutationTypes.SetProvider, newprovider)
       await dispatch(actionTypes.FetchProviders)
     },
@@ -55,10 +59,15 @@ export default {
     async [actionTypes.EditProvider] ({ dispatch, commit }, provider) {
       const url = `${process.env.VUE_APP_API_URL}/providers/edit/${provider._id}`
       console.log(url)
+      // const data = {
+      //   name: JSON.parse(JSON.stringify(provider.name))
+      // }
+      const { _id, ...data } = provider
       console.log(JSON.parse(JSON.stringify(provider)))
-      const updatedProvider = await editData(url, provider)
+      // const newprovider = JSON.parse(JSON.stringify(provider))
+      const updatedProvider = await editData(url, data)
       console.log('updatedProvider is ', updatedProvider)
-      // await commit(mutationTypes.UpdateProvider, updatedProvider)
+      await commit(mutationTypes.UpdateProvider, provider._id)
       await dispatch(actionTypes.FetchProviders)
     }
   }
