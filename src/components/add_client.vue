@@ -163,36 +163,15 @@ const newProvider = ref({
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  // console.log('delete')
-  // console.log('id is ', id)
-  // const url = `${process.env.VUE_APP_API_URL}/clients/delete`
-  // await store.dispatch(actionTypes.RemoveClient, url, id)
-  // console.log('url is ', url)
-  // console.log('removedClient is ', removedClient)
-  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // await store.dispatch(actionTypes.FetchClients, clientData.client)
-  // store.dispatch(actionTypes.UpdateLoadingStatus, false)
-  // return await store.getters.getClients.value
 
   console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
-
-  // store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  // console.log('delete')
-  // console.log('id is ', id)
-  // const url = `${process.env.VUE_APP_API_URL}/clients/delete`
-  // console.log('url is ', url)
-  // await removeData(url, id)
-  // console.log('removedClient is ', removedClient)
-  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // await store.dispatch(actionTypes.FetchClients)
   await store.dispatch(actionTypes.UpdateOpenStatus, false)
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
   setTimeout(() => {
     store.dispatch(actionTypes.UpdateProclient, oldProclient)
   }, 500)
-  // await store.getters.getClients.value
 }
 
 const provider = computed(() => {
@@ -220,25 +199,9 @@ const cancelEdit = async () => {
 }
 
 const onEditClient = async () => {
-  // console.log('I am a client edit function')
-  // const id = proclient.value._id
-  // const url = `${process.env.VUE_APP_API_URL}/clients/edit/${id}`
-  // console.log('url', url)
   console.log('proclient is ', JSON.parse(JSON.stringify(proclient.value)))
   const proclientelle = JSON.parse(JSON.stringify(proclient.value))
   await store.dispatch(actionTypes.EditClient, proclientelle)
-  // await store.getters.getProclients.value
-  // console.log('proclients here in client edit', store.getters.getProclients.value)
-  // console.log('proclient data ', proclient.value._id)
-  // await editData(url, id, proclient.value)
-  // console.log('new proclient in edit function', newProclient)
-  // // await store.dispatch(actionTypes.UpdateProclient, {})
-  // await store.dispatch(actionTypes.UpdateOpenStatus, false)
-  // await store.dispatch(actionTypes.UpdateEditingStatus, false)
-  // await store.dispatch(actionTypes.UpdateClientEditingStatus, false)
-  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // await store.dispatch(actionTypes.FetchClients, clientData.client)
-  // return await store.getters.getClients.value
 }
 
 const deleteProvider = async (id) => {
@@ -248,18 +211,12 @@ const deleteProvider = async (id) => {
 }
 
 const editProvider = async (id) => {
-  // console.log('edit provider', id)
   const url = `${process.env.VUE_APP_API_URL}/providers/${id}`
   console.log('url', url)
   const editData = await fetchDataByID(url)
   console.log('editData', editData.provider)
   newProvider.value = editData.provider
-  // console.log('newProvider from edit', newProvider.value)
   await store.dispatch(actionTypes.UpdateEditingStatus, true)
-  // saveProvider(id, newProvider.value)
-  // const payload = JSON.stringify(newProvider.value)
-  // const editedData = await editData(url, id, payload)
-  // console.log('editedData', editedData)
 }
 
 const onSubmit = async () => {
@@ -274,98 +231,43 @@ const onSubmit = async () => {
   console.log('newData is ', newData)
   const newClient = await store.dispatch(actionTypes.AddClient, newData)
   console.log('new client is', newClient)
-  // console.log('we have a problem houston')
-  // console.log('onsubmit data', data)
-  // console.log('addclient action', addData(process.env.VUE_APP_API_URL + '/clients/add', JSON.stringify(proclient.value)))
-  // const newClient = await addData(url, data)
-  // if (!data.name || !data.email || !data.phone || !data.provider) {
-  //   Swal.fire('Error', 'missing etails', 'error')
-  // }
-  // await addData(url, data)
-  // console.log('newclient is now', newClient)
-  // saveProvider()
-  // await store.dispatch('ADD_CLIENT', newClient.client)
-  // console.log('i passed')
-  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // console.log('this very')
-  // await store.dispatch(actionTypes.FetchClients, clientData.client)
-  // console.log('point in')
-  // await store.getters.getProclients.value
-  // console.log('this code')
   await store.dispatch(actionTypes.UpdateOpenStatus, false)
   setTimeout(() => {
     store.dispatch(actionTypes.UpdateProclient, oldProclient)
   }, 500)
-  // await store.getters.getProclients.value
-  // console.log('something interesting', store.getters.getProclients.value)
-  // proclient.value = {}
-  // Swal.fire('Successful', 'New clientresponse saved!', 'success')
-  // window.location.reload()
 }
 
 const addProvider = async () => {
   const url = `${process.env.VUE_APP_API_URL}/providers/add`
-  // const data = JSON.stringify(newProvider.value)
-  // const data = {
-  //   name: newProvider.value
-  // }
-  // console.log('new value of propro', newProvider.value)
   const data = JSON.parse(JSON.stringify(newProvider.value))
-  // console.log('addProvider button clicked')
   console.log('add provider function', data)
   const newData = {
     url: url,
     data: data
   }
   await store.dispatch(actionTypes.AddProvider, newData)
-  // const anotherProvider = await addData(url, data)
-  // console.log('anotherProvider is now', anotherProvider.provider)
-  // await store.dispatch('ADD_PROVIDER', anotherProvider.provider)
-  // const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
-  // await store.dispatch('FETCH_PROVIDERS', providerData.provider)
   newProvider.value.name = ''
-  return await store.getters.getProviders.value
 }
 
 const saveProvider = async () => {
-  // const url = process.env.VUE_APP_API_URL + '/providers/edit'
-  // console.log('save provider id is :', id)
-  // console.log('payload', payload)
   const data = JSON.parse(JSON.stringify(newProvider.value))
-  // console.log('addProvider button clicked')
   console.log('save provider function', data)
-  // const anotherProvider = await editData(url, id, data)
-  // console.log('anotherProvider is now', anotherProvider.provider)
   await store.dispatch(actionTypes.EditProvider, data)
-  // const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
-  // const clientelle = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // await store.dispatch('FETCH_PROVIDERS', providerData.provider)
-  // await store.dispatch(actionTypes.FetchClients, clientelle.client)
-  // console.log('provider saved', store.getters.getProviders.value)
   await store.dispatch(actionTypes.UpdateEditingStatus, false)
   newProvider.value.name = ''
   await store.dispatch(actionTypes.FetchProviders)
-  await store.dispatch(actionTypes.FetchClients)
-  // const newproclientelle = await store.getters.getProclients.value
-  // const newclientpro = await store.getters.getProviders.value
-  // return {
-  //   newproclientelle,
-  //   newclientpro
-  // }
+  // window.location.reload()
+  await store.getters.getClients.value
+  const updatedClient = await fetchDataByID(`${process.env.VUE_APP_API_URL}/clients/${proclient.value._id}`)
+  console.log('updatedClient is ', updatedClient.client)
+  await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
+  console.log('my getters got ', store.getters.getClients)
+  console.log('proclient vlaue is ', JSON.parse(JSON.stringify(proclient.value)))
 }
 
 onMounted(async () => {
-  // const data = await fetchClient()
-  // console.log('get proclients result ', store.getters.getProclients.value)
   await store.getters.getProviders.value
   return await store.getters.getProclients.value
 })
-
-// const hideProvider = () => {
-//   console.log('hello')
-//   store.dispatch('UPDATE_PROVIDER_STATUS', false)
-// }
-
-// document.addEventListener('esc', close)
 
 </script>

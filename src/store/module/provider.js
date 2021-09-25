@@ -1,8 +1,6 @@
 import { computed } from 'vue'
 import * as mutationTypes from '../constants/mutations'
 import * as actionTypes from '../constants/actions'
-// import axios from 'axios'
-// import { fetchData, fetchDataByID, addData, editData, removeData } from '../api'
 import { fetchData, addData, editData, removeData } from '../../api'
 
 export default {
@@ -35,7 +33,6 @@ export default {
   },
   actions: {
     async [actionTypes.FetchProviders] ({ commit }) {
-      // console.log('hello from mr fetch')
       const url = `${process.env.VUE_APP_API_URL}/providers/all`
       const data = await fetchData(url)
       console.log('provider data from store', data.providers)
@@ -55,20 +52,18 @@ export default {
       await removeData(providerUrl)
       // await commit(mutationTypes.DeleteProvider, provider)
       await dispatch(actionTypes.FetchProviders)
+      await dispatch(actionTypes.FetchClients)
     },
     async [actionTypes.EditProvider] ({ dispatch, commit }, provider) {
       const url = `${process.env.VUE_APP_API_URL}/providers/edit/${provider._id}`
       console.log(url)
-      // const data = {
-      //   name: JSON.parse(JSON.stringify(provider.name))
-      // }
       const { _id, ...data } = provider
       console.log(JSON.parse(JSON.stringify(provider)))
-      // const newprovider = JSON.parse(JSON.stringify(provider))
       const updatedProvider = await editData(url, data)
       console.log('updatedProvider is ', updatedProvider)
       await commit(mutationTypes.UpdateProvider, provider._id)
       await dispatch(actionTypes.FetchProviders)
+      await dispatch(actionTypes.FetchClients)
     }
   }
 }

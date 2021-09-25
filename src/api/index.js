@@ -26,47 +26,23 @@ export const fetchDataByID = async (url) => {
 }
 
 export const addData = async (url, data) => {
-  // const newData = JSON.parse(data)
-  // console.log('i am here now')
-  // console.log('currently data', data)
-  // console.log('currently new data', newData.name)
   return await axios.post(url, data)
     .then(response => {
-      // console.log('i am here in processing')
-      // console.log('response team', response.data)
       Swal.fire({
         title: 'Successful!',
         text: 'New data added',
         timer: 1500,
         icon: 'success'
       })
-      // Swal.fire('Successfully', 'added', 'success')
-      // setTimeout(() => {
-      //   window.location.reload()
-      // }, 2500)
       return response.data
     })
     .catch((error) => {
       console.log('add data error', error.message)
       if (error.message.includes('409')) {
-        // Swal.fire('Error', 'Duplicate data submitted', 'error')
-        Swal.fire({
-          title: 'Error!',
-          text: 'Duplicate data submitted',
-          timer: 1500,
-          icon: 'error'
-        })
+        Swal.fire('Error', 'Duplicate data submitted', 'error')
       } else if (error.message.includes('400')) {
-        // Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
-        Swal.fire({
-          title: 'Error!',
-          text: 'Invalid/Incomplete data submitted',
-          timer: 1500,
-          icon: 'error'
-        })
+        Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
       }
-      // Swal.fire('Error', error.message, 'error')
-      // return error
     })
 }
 
@@ -77,7 +53,6 @@ export const editData = async (url, payload) => {
     .then(
       response => {
         console.log('response team', response.data)
-        // Swal.fire('Successfully', 'edited', 'success')
         Swal.fire({
           title: 'Successful!',
           text: 'Data has been updated',
@@ -90,13 +65,7 @@ export const editData = async (url, payload) => {
     .catch((error) => {
       console.log(error.message)
       if (error.message.includes('400')) {
-        // Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
-        Swal.fire({
-          title: 'Error!',
-          text: 'Invalid/Incomplete data submitted',
-          timer: 1500,
-          icon: 'error'
-        })
+        Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
       }
     })
 }
@@ -105,8 +74,6 @@ export const removeData = async (url) => {
   return await axios.delete(`${url}`)
     .then(
       response => {
-        // console.log('response team', response.data)
-        // Swal.fire('Successfully', 'deleted', 'success')
         Swal.fire({
           title: 'Successful!',
           text: 'Data has been deleted',
@@ -119,13 +86,7 @@ export const removeData = async (url) => {
     .catch((error) => {
       console.log(error.message)
       if (error.message.includes('400')) {
-        // Swal.fire('Error', 'Invalid/Incomplete id submitted', 'error')
-        Swal.fire({
-          title: 'Error!',
-          text: 'Invalid/Incomplete data submitted',
-          timer: 1500,
-          icon: 'error'
-        })
+        Swal.fire('Error', 'Invalid/Incomplete id submitted', 'error')
       }
     })
 }
@@ -135,13 +96,7 @@ export const filterData = async () => {
     .then()
     .catch((error) => {
       console.log(error.message)
-      // Swal.fire('Error', 'missing details', 'error')
-      Swal.fire({
-        title: 'Error!',
-        text: 'Invalid/Incomplete data submitted',
-        timer: 1500,
-        icon: 'error'
-      })
+      Swal.fire('Error', 'missing details', 'error')
       return error
     })
 }
