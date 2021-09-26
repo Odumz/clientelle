@@ -32,6 +32,8 @@
                           <div class="md:w-full">
                             <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
                           </div>
+                          <p v-if="error.name" class="text-xs text-red-500 p-2"> {{ error.name.message }} </p>
+                          <!-- <div v-if="true" class="text-xs text-red-500 p-2"> error here </div> -->
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -42,6 +44,7 @@
                           <div class="md:w-full">
                             <input :disabled="editclient" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
                           </div>
+                          <p v-if="error.email" class="text-xs text-red-500 p-2"> {{ error.email.message }} </p>
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -50,8 +53,9 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="tel" placeholder="08054236958">
+                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="number" placeholder="08054236958">
                           </div>
+                          <p v-if="error.phone" class="text-xs text-red-500 p-2"> {{ error.phone.message }} </p>
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -74,6 +78,7 @@
                               </button>
                               </div>
                             </div>
+                          <p v-if="providererror.state" class="text-xs col-span-4 text-red-500"> {{ providererror.message }} </p>
                             <!-- <span>
                               {{ checkedNames }}
                             </span> -->
@@ -99,6 +104,7 @@
                               </div>
                             <!-- </div> -->
                           </div>
+                          <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers.message }} </p>
                         </div>
                               <!-- {{ proclient.provider }} -->
                       </form>
@@ -152,13 +158,27 @@ const editing = computed(() => {
 })
 
 const close = async () => {
-  store.dispatch(actionTypes.UpdateOpenStatus, false)
-  store.dispatch(actionTypes.UpdateClientEditingStatus, false)
-  store.dispatch(actionTypes.UpdateProclient, oldProclient)
+  await store.dispatch(actionTypes.UpdateOpenStatus, false)
+  await store.dispatch(actionTypes.UpdateClientEditingStatus, false)
+  await store.dispatch(actionTypes.UpdateProclient, oldProclient)
+  await store.dispatch(actionTypes.UpdateErrorStatus, olderror)
+  await store.dispatch(actionTypes.UpdateProviderErrorStatus, oldprovidererror)
 }
+
+const olderror = JSON.parse(JSON.stringify(store.getters.getErrorStatus.value))
+
+const oldprovidererror = JSON.parse(JSON.stringify(store.getters.getProviderErrorStatus.value))
 
 const newProvider = ref({
   name: ''
+})
+
+const error = computed(() => {
+  return JSON.parse(JSON.stringify(store.getters.getErrorStatus.value))
+})
+
+const providererror = computed(() => {
+  return JSON.parse(JSON.stringify(store.getters.getProviderErrorStatus.value))
 })
 
 const onDelete = async (id) => {
@@ -178,15 +198,10 @@ const provider = computed(() => {
   return store.getters.getProviders.value
 })
 
-const oldProclient = {
-  name: '',
-  email: '',
-  phone: '',
-  provider: []
-}
+const oldProclient = JSON.parse(JSON.stringify(store.getters.getProclients.value))
 
 const proclient = computed(() => {
-  return store.getters.getProclients.value
+  return JSON.parse(JSON.stringify(store.getters.getProclients.value))
 })
 
 const editclient = computed(() => {
@@ -198,10 +213,152 @@ const cancelEdit = async () => {
   store.dispatch(actionTypes.UpdateEditingStatus, false)
 }
 
+const providerErrorCheck = async () => {
+  const data = JSON.parse(JSON.stringify(newProvider.value))
+  const newerror = providererror.value
+  // const newerror = JSON.parse(JSON.stringify(providererror.value))
+  console.log('error here is', providererror.value)
+  console.log('current name = ', data)
+
+  if (!data.name) {
+    newerror.name = {
+      state: true,
+      message: 'Provider name is required'
+    }
+    store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
+  } else if (data.name.length < 3) {
+    newerror.name = {
+      state: true,
+      message: 'Provider name cannot be less than 3 letters'
+    }
+    store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
+  } else {
+    newerror.name = {
+      state: false
+    }
+    store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
+  }
+
+  console.log('error now is', providererror.value)
+  if (providererror.value.state) {
+    return true
+  }
+}
+
+const errorCheck = async () => {
+  const data = proclient.value
+  const newerror = error.value
+  console.log('submitted data is: ', data)
+  console.log('error data is ', newerror)
+
+  if (!data.provider[0]) {
+    newerror.providers = {
+      state: true,
+      message: 'At least one provider is required to register a client'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else {
+    newerror.providers = {
+      state: false
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  }
+  console.log(typeof data.phone)
+
+  if (!data.phone) {
+    newerror.phone = {
+      state: true,
+      message: 'Client phone is required'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else if (data.phone < 999999999) {
+    newerror.phone = {
+      state: true,
+      message: 'Client phone cannot be less than 10 digits'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else {
+    newerror.phone = {
+      state: false
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  }
+
+  if (!data.name) {
+    newerror.name = {
+      state: true,
+      message: 'Client name is required'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else if (data.name.length < 3) {
+    newerror.name = {
+      state: true,
+      message: 'Client name cannot be less than 3 letters'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else {
+    newerror.name = {
+      state: false
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  }
+
+  // (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+  if (!data.email) {
+    newerror.email = {
+      state: true,
+      message: 'Client email is required'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else if (!data.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+    newerror.email = {
+      state: true,
+      message: 'Client email be have email format'
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else {
+    newerror.email = {
+      state: false
+    }
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  }
+
+  // console.log('all errors ', newerror.name.state)
+
+  if (newerror.name.state || newerror.email.state || newerror.phone.state || newerror.providers.state) {
+    return true
+  }
+}
+
 const onEditClient = async () => {
-  console.log('proclient is ', JSON.parse(JSON.stringify(proclient.value)))
-  const proclientelle = JSON.parse(JSON.stringify(proclient.value))
-  await store.dispatch(actionTypes.EditClient, proclientelle)
+  const newerrors = await errorCheck()
+  if (!newerrors) {
+    console.log('proclient is ', JSON.parse(JSON.stringify(proclient.value)))
+    // const proclientelle = JSON.parse(JSON.stringify(proclient.value))
+    await store.dispatch(actionTypes.EditClient, proclient.value)
+  }
 }
 
 const deleteProvider = async (id) => {
@@ -220,53 +377,65 @@ const editProvider = async (id) => {
 }
 
 const onSubmit = async () => {
-  const url = `${process.env.VUE_APP_API_URL}/clients/add`
-  const data = JSON.parse(JSON.stringify(proclient.value))
-  console.log('url', url)
-  console.log('submitted data is: ', data)
-  const newData = {
-    url: url,
-    data: data
+  const newerrors = await errorCheck()
+  console.log('error check response', newerrors)
+  if (!newerrors) {
+    const url = `${process.env.VUE_APP_API_URL}/clients/add`
+    // const data = JSON.parse(JSON.stringify(proclient.value))
+    console.log('url', url)
+    // console.log('submitted data is: ', data)
+    const newData = {
+      url: url,
+      data: proclient.value
+    }
+    console.log('newData is ', newData)
+    const newClient = await store.dispatch(actionTypes.AddClient, newData)
+    console.log('new client is', newClient)
+    await store.dispatch(actionTypes.UpdateOpenStatus, false)
+    setTimeout(() => {
+      store.dispatch(actionTypes.UpdateProclient, oldProclient)
+    }, 500)
   }
-  console.log('newData is ', newData)
-  const newClient = await store.dispatch(actionTypes.AddClient, newData)
-  console.log('new client is', newClient)
-  await store.dispatch(actionTypes.UpdateOpenStatus, false)
-  setTimeout(() => {
-    store.dispatch(actionTypes.UpdateProclient, oldProclient)
-  }, 500)
 }
 
 const addProvider = async () => {
-  const url = `${process.env.VUE_APP_API_URL}/providers/add`
-  const data = JSON.parse(JSON.stringify(newProvider.value))
-  console.log('add provider function', data)
-  const newData = {
-    url: url,
-    data: data
+  const newerrors = await providerErrorCheck()
+  if (!newerrors) {
+    const url = `${process.env.VUE_APP_API_URL}/providers/add`
+    const data = JSON.parse(JSON.stringify(newProvider.value))
+    console.log('add provider function', data)
+    const newData = {
+      url: url,
+      data: data
+    }
+    await store.dispatch(actionTypes.AddProvider, newData)
+    newProvider.value.name = ''
   }
-  await store.dispatch(actionTypes.AddProvider, newData)
-  newProvider.value.name = ''
 }
 
 const saveProvider = async () => {
-  const data = JSON.parse(JSON.stringify(newProvider.value))
-  console.log('save provider function', data)
-  await store.dispatch(actionTypes.EditProvider, data)
-  await store.dispatch(actionTypes.UpdateEditingStatus, false)
-  newProvider.value.name = ''
-  await store.dispatch(actionTypes.FetchProviders)
-  // window.location.reload()
-  await store.getters.getClients.value
-  const updatedClient = await fetchDataByID(`${process.env.VUE_APP_API_URL}/clients/${proclient.value._id}`)
-  console.log('updatedClient is ', updatedClient.client)
-  await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
-  console.log('my getters got ', store.getters.getClients)
-  console.log('proclient vlaue is ', JSON.parse(JSON.stringify(proclient.value)))
+  const newerrors = await providerErrorCheck()
+  if (!newerrors) {
+    const data = JSON.parse(JSON.stringify(newProvider.value))
+    console.log('save provider function', data)
+    await store.dispatch(actionTypes.EditProvider, data)
+    await store.dispatch(actionTypes.UpdateEditingStatus, false)
+    newProvider.value.name = ''
+    await store.dispatch(actionTypes.FetchProviders)
+    // window.location.reload()
+    await store.getters.getClients.value
+    const updatedClient = await fetchDataByID(`${process.env.VUE_APP_API_URL}/clients/${proclient.value._id}`)
+    console.log('updatedClient is ', updatedClient.client)
+    await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
+    console.log('my getters got ', store.getters.getClients)
+    console.log('proclient vlaue is ', JSON.parse(JSON.stringify(proclient.value)))
+  }
 }
 
 onMounted(async () => {
   await store.getters.getProviders.value
+  await store.getters.getErrorStatus.value
+  console.log('error status is', store.getters.getErrorStatus.value)
   return await store.getters.getProclients.value
 })
 

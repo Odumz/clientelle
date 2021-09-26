@@ -10,10 +10,26 @@ export default {
     open: false,
     isEditing: false,
     errors: {
-      name: false,
-      email: false,
-      phone: false,
-      provider: false
+      name: {
+        state: false,
+        message: ''
+      },
+      email: {
+        state: false,
+        message: ''
+      },
+      phone: {
+        state: false,
+        message: ''
+      },
+      providers: {
+        state: false,
+        message: ''
+      }
+    },
+    providererror: {
+      state: false,
+      message: ''
     },
     clientEditing: false,
     title: ''
@@ -48,6 +64,11 @@ export default {
       return computed(() => {
         return state.errors
       })
+    },
+    getProviderErrorStatus: (state) => {
+      return computed(() => {
+        return state.providererror
+      })
     }
   },
   mutations: {
@@ -68,6 +89,9 @@ export default {
     },
     [mutationTypes.EditErrorStatus] (state, data) {
       state.errors = data
+    },
+    [mutationTypes.EditProviderErrorStatus] (state, data) {
+      state.providererror = data
     }
   },
   actions: {
@@ -92,7 +116,12 @@ export default {
       commit(mutationTypes.SetClientEditingStatus, data)
     },
     [actionTypes.UpdateErrorStatus] ({ commit }, data) {
-      commit(mutationTypes.EditErrorStatus, data)
+      console.log('data here is ', JSON.parse(JSON.stringify(data)))
+      commit(mutationTypes.EditErrorStatus, JSON.parse(JSON.stringify(data)))
+    },
+    [actionTypes.UpdateProviderErrorStatus] ({ commit }, data) {
+      console.log('data here is ', JSON.parse(JSON.stringify(data)))
+      commit(mutationTypes.EditProviderErrorStatus, JSON.parse(JSON.stringify(data)))
     }
   }
 }
