@@ -30,7 +30,6 @@ export default {
   mutations: {
     [mutationTypes.GetClients] (state, clients) {
       state.clients = clients
-      console.log('second state', state.clients)
     },
     [mutationTypes.SetClient] (state, clients) {
       state.clients = [...state.clients, clients]
@@ -65,11 +64,8 @@ export default {
     },
     async [actionTypes.EditClient] ({ dispatch, commit }, payload) {
       const url = `${process.env.VUE_APP_API_URL}/clients/edit/${payload._id}`
-      console.log('payload in store', payload)
       const { _id, email, ...rest } = payload
-      console.log('rest is ', rest)
-      const updatedClient = await editData(url, rest)
-      console.log('updatedClient', updatedClient)
+      await editData(url, rest)
       await dispatch(actionTypes.UpdateOpenStatus, false)
       await dispatch(actionTypes.UpdateEditingStatus, false)
       await dispatch(actionTypes.UpdateClientEditingStatus, false)
@@ -77,7 +73,6 @@ export default {
       await dispatch(actionTypes.FetchClients)
     },
     async [actionTypes.UpdateProclient] ({ commit }, data) {
-      console.log('new proc', data)
       await commit(mutationTypes.SetProclient, data)
     }
   }

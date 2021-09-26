@@ -109,65 +109,37 @@ import { Icon } from '@iconify/vue'
 import * as actionTypes from '../store/constants/actions'
 
 const store = useStore()
-console.log('store here  is', store)
 
 const proclients = computed(() => {
-  // console.log('loly')
-  console.log('store details', store.getters.getClients.value)
   return store.getters.getClients.value
 })
 
 const loadingState = computed(() => store.getters.getLoadingState.value)
 
 onMounted(async () => {
-  // console.log('store is', store)
-  // const providerData = await fetchData(process.env.VUE_APP_API_URL + '/providers')
-  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // console.log('client', clientData.client)
-  // console.log('provider from client', providerData.provider)
-  console.log('I have')
   await store.dispatch(actionTypes.FetchClients)
-  console.log('just gotten')
   await store.dispatch(actionTypes.FetchProviders)
-  console.log('here oh')
 })
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  // console.log('delete')
-  console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
-  // console.log('url is ', url)
-  // console.log('removedClient is ', removedClient)
-  // const clientData = await fetchData(process.env.VUE_APP_API_URL + '/clients')
-  // await store.dispatch(actionTypes.FetchClients, clientData.client)
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
-  // return await store.getters.getClients.value
 }
 
 const onEdit = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  // console.log('edit client')
-  console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients/${id}`
-  // console.log('url is ', url)
   const editData = await fetchDataByID(url)
-  // console.log('editData', editData.client.provider)
-  console.log('editData', editData.client)
   await store.dispatch(actionTypes.UpdateProclient, editData.client)
   await store.dispatch(actionTypes.UpdateTitle, 'Edit')
   await store.dispatch(actionTypes.UpdateOpenStatus, true)
   await store.dispatch(actionTypes.UpdateClientEditingStatus, true)
-  // const removedClient = await removeData(url, id)
-  // console.log('removedClient is ', removedClient)
   await store.dispatch(actionTypes.UpdateLoadingStatus, false)
-  // console.log('new proclients o: ', store.getters.getProclients.value)
-  // return await store.getters.getProclients.value
 }
 
 const onAdd = async () => {
-  // console.log('add')
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
   store.dispatch(actionTypes.UpdateTitle, 'New')
   store.dispatch(actionTypes.UpdateOpenStatus, true)

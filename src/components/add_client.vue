@@ -183,8 +183,6 @@ const providererror = computed(() => {
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-
-  console.log('id is ', id)
   const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
   await store.dispatch(actionTypes.UpdateOpenStatus, false)
@@ -216,9 +214,6 @@ const cancelEdit = async () => {
 const providerErrorCheck = async () => {
   const data = JSON.parse(JSON.stringify(newProvider.value))
   const newerror = providererror.value
-  // const newerror = JSON.parse(JSON.stringify(providererror.value))
-  console.log('error here is', providererror.value)
-  console.log('current name = ', data)
 
   if (!data.name) {
     newerror.name = {
@@ -239,7 +234,6 @@ const providerErrorCheck = async () => {
     store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
   }
 
-  console.log('error now is', providererror.value)
   if (providererror.value.state) {
     return true
   }
@@ -248,8 +242,6 @@ const providerErrorCheck = async () => {
 const errorCheck = async () => {
   const data = proclient.value
   const newerror = error.value
-  console.log('submitted data is: ', data)
-  console.log('error data is ', newerror)
 
   if (!data.provider[0]) {
     newerror.providers = {
@@ -345,8 +337,6 @@ const errorCheck = async () => {
     })
   }
 
-  // console.log('all errors ', newerror.name.state)
-
   if (newerror.name.state || newerror.email.state || newerror.phone.state || newerror.providers.state) {
     return true
   }
@@ -355,42 +345,31 @@ const errorCheck = async () => {
 const onEditClient = async () => {
   const newerrors = await errorCheck()
   if (!newerrors) {
-    console.log('proclient is ', JSON.parse(JSON.stringify(proclient.value)))
-    // const proclientelle = JSON.parse(JSON.stringify(proclient.value))
     await store.dispatch(actionTypes.EditClient, proclient.value)
   }
 }
 
 const deleteProvider = async (id) => {
   const url = `${process.env.VUE_APP_API_URL}/providers/delete/${id}`
-  console.log('url', url)
   await store.dispatch(actionTypes.RemoveProvider, url)
 }
 
 const editProvider = async (id) => {
   const url = `${process.env.VUE_APP_API_URL}/providers/${id}`
-  console.log('url', url)
   const editData = await fetchDataByID(url)
-  console.log('editData', editData.provider)
   newProvider.value = editData.provider
   await store.dispatch(actionTypes.UpdateEditingStatus, true)
 }
 
 const onSubmit = async () => {
   const newerrors = await errorCheck()
-  console.log('error check response', newerrors)
   if (!newerrors) {
     const url = `${process.env.VUE_APP_API_URL}/clients/add`
-    // const data = JSON.parse(JSON.stringify(proclient.value))
-    console.log('url', url)
-    // console.log('submitted data is: ', data)
     const newData = {
       url: url,
       data: proclient.value
     }
-    console.log('newData is ', newData)
-    const newClient = await store.dispatch(actionTypes.AddClient, newData)
-    console.log('new client is', newClient)
+    await store.dispatch(actionTypes.AddClient, newData)
     await store.dispatch(actionTypes.UpdateOpenStatus, false)
     setTimeout(() => {
       store.dispatch(actionTypes.UpdateProclient, oldProclient)
@@ -403,7 +382,6 @@ const addProvider = async () => {
   if (!newerrors) {
     const url = `${process.env.VUE_APP_API_URL}/providers/add`
     const data = JSON.parse(JSON.stringify(newProvider.value))
-    console.log('add provider function', data)
     const newData = {
       url: url,
       data: data
@@ -417,25 +395,19 @@ const saveProvider = async () => {
   const newerrors = await providerErrorCheck()
   if (!newerrors) {
     const data = JSON.parse(JSON.stringify(newProvider.value))
-    console.log('save provider function', data)
     await store.dispatch(actionTypes.EditProvider, data)
     await store.dispatch(actionTypes.UpdateEditingStatus, false)
     newProvider.value.name = ''
     await store.dispatch(actionTypes.FetchProviders)
-    // window.location.reload()
     await store.getters.getClients.value
     const updatedClient = await fetchDataByID(`${process.env.VUE_APP_API_URL}/clients/${proclient.value._id}`)
-    console.log('updatedClient is ', updatedClient.client)
     await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
-    console.log('my getters got ', store.getters.getClients)
-    console.log('proclient vlaue is ', JSON.parse(JSON.stringify(proclient.value)))
   }
 }
 
 onMounted(async () => {
   await store.getters.getProviders.value
   await store.getters.getErrorStatus.value
-  console.log('error status is', store.getters.getErrorStatus.value)
   return await store.getters.getProclients.value
 })
 

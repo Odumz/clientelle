@@ -4,13 +4,10 @@ import Swal from 'sweetalert2'
 export const fetchData = async (url) => {
   return await axios.get(url)
     .then(response => {
-      console.log('this where i am')
-      console.log('response is ', response.data.data)
       return response.data.data
     }
     )
     .catch(error => {
-      console.log(error)
       return error
     })
 }
@@ -20,7 +17,6 @@ export const fetchDataByID = async (url) => {
     .then(response => response.data.data
     )
     .catch(error => {
-      console.log(error)
       return error
     })
 }
@@ -37,7 +33,6 @@ export const addData = async (url, data) => {
       return response.data
     })
     .catch((error) => {
-      console.log('add data error', error.message)
       if (error.message.includes('409')) {
         Swal.fire('Error', 'Duplicate data submitted', 'error')
       } else if (error.message.includes('400')) {
@@ -47,12 +42,9 @@ export const addData = async (url, data) => {
 }
 
 export const editData = async (url, payload) => {
-  console.log('url is ', url)
-  console.log('payload is ', payload)
   return await axios.put(url, payload)
     .then(
       response => {
-        console.log('response team', response.data)
         Swal.fire({
           title: 'Successful!',
           text: 'Data has been updated',
@@ -63,7 +55,6 @@ export const editData = async (url, payload) => {
       }
     )
     .catch((error) => {
-      console.log(error.message)
       if (error.message.includes('400')) {
         Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
       }
@@ -84,7 +75,6 @@ export const removeData = async (url) => {
       }
     )
     .catch((error) => {
-      console.log(error.message)
       if (error.message.includes('400')) {
         Swal.fire('Error', 'Invalid/Incomplete id submitted', 'error')
       }
@@ -95,7 +85,6 @@ export const filterData = async () => {
   return await axios.get()
     .then()
     .catch((error) => {
-      console.log(error.message)
       Swal.fire('Error', 'missing details', 'error')
       return error
     })

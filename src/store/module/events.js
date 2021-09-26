@@ -99,11 +99,9 @@ export default {
       commit(mutationTypes.SetOpenStatus, data)
     },
     [actionTypes.UpdateProclient] ({ commit }, data) {
-      // console.log('proclient data from store', data)
       commit(mutationTypes.SetProclient, data)
     },
     [actionTypes.UpdateLoadingStatus] ({ commit }, data) {
-      // console.log('proclient data from store', data)
       commit(mutationTypes.SetLoadingStatus, data)
     },
     [actionTypes.UpdateTitle] ({ commit }, data) {
@@ -116,11 +114,9 @@ export default {
       commit(mutationTypes.SetClientEditingStatus, data)
     },
     [actionTypes.UpdateErrorStatus] ({ commit }, data) {
-      console.log('data here is ', JSON.parse(JSON.stringify(data)))
       commit(mutationTypes.EditErrorStatus, JSON.parse(JSON.stringify(data)))
     },
     [actionTypes.UpdateProviderErrorStatus] ({ commit }, data) {
-      console.log('data here is ', JSON.parse(JSON.stringify(data)))
       commit(mutationTypes.EditProviderErrorStatus, JSON.parse(JSON.stringify(data)))
     }
   }
