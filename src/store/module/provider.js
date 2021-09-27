@@ -47,7 +47,6 @@ export default {
     },
     async [actionTypes.RemoveProvider] ({ dispatch, commit }, providerUrl) {
       await removeData(providerUrl)
-      // await commit(mutationTypes.DeleteProvider, provider)
       await dispatch(actionTypes.FetchProviders)
       await dispatch(actionTypes.FetchClients)
     },

@@ -19,10 +19,9 @@ local url for development: http://localhost:8080 //or PORT
 Run `npm run build` to start the production server
 
 ### Lints and fixes files
-```
-npm run lint
-```
+Run `npm run lint` to fix linting issues
 
 ## Project links
 - [GitHub](https://github.com/Odumz/clientelle.git)
 - [Demo](https://clientelle.vercel.app)
+- [API Url](https://clientelle.herokuapp.com)

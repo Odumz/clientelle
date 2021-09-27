@@ -6,6 +6,6 @@
 </template>
 
 <script setup>
-import clientList from '@/components/client_list1.vue'
+import clientList from '@/components/client_list.vue'
 import addClient from '@/components/add_client.vue'
 </script>

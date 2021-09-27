@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
+// api helper to fetch data from the backend
 export const fetchData = async (url) => {
   return await axios.get(url)
     .then(response => {
@@ -12,6 +13,7 @@ export const fetchData = async (url) => {
     })
 }
 
+// api helper to fetch data by ID from the backend
 export const fetchDataByID = async (url) => {
   return await axios.get(`${url}`, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } })
     .then(response => response.data.data
@@ -21,6 +23,7 @@ export const fetchDataByID = async (url) => {
     })
 }
 
+// api helper to add data to the backend
 export const addData = async (url, data) => {
   return await axios.post(url, data)
     .then(response => {
@@ -41,6 +44,7 @@ export const addData = async (url, data) => {
     })
 }
 
+// api helper to edit data in the backend
 export const editData = async (url, payload) => {
   return await axios.put(url, payload)
     .then(
@@ -61,6 +65,7 @@ export const editData = async (url, payload) => {
     })
 }
 
+// api helper to delete data from the backend
 export const removeData = async (url) => {
   return await axios.delete(`${url}`)
     .then(
@@ -78,14 +83,5 @@ export const removeData = async (url) => {
       if (error.message.includes('400')) {
         Swal.fire('Error', 'Invalid/Incomplete id submitted', 'error')
       }
-    })
-}
-
-export const filterData = async () => {
-  return await axios.get()
-    .then()
-    .catch((error) => {
-      Swal.fire('Error', 'missing details', 'error')
-      return error
     })
 }

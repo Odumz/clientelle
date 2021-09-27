@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot as="template" :show="open">
     <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="open = false">
@@ -7,7 +6,6 @@
           <DialogOverlay @click.prevent="close(); cancelEdit();" class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
-        <!-- This element is to trick the browser into centering the modal contents. -->
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
           <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
@@ -33,7 +31,6 @@
                             <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
                           </div>
                           <p v-if="error.name" class="text-xs text-red-500 p-2"> {{ error.name.message }} </p>
-                          <!-- <div v-if="true" class="text-xs text-red-500 p-2"> error here </div> -->
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -79,34 +76,19 @@
                               </div>
                             </div>
                           <p v-if="providererror.state" class="text-xs col-span-4 text-red-500"> {{ providererror.message }} </p>
-                            <!-- <span>
-                              {{ checkedNames }}
-                            </span> -->
-                            <!-- <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="-- Select Provider(s) --" value=""> -->
-                            <!-- <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
-                            <label for="jack">Jack</label>
-                            <input type="checkbox" id="john" value="John" v-model="checkedNames" />
-                            <label for="john">John</label>
-                            <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
-                            <label for="mike">Mike</label> -->
                           </div>
                         </div>
                         <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <div v-for="(cprovider, index) in provider" :key="index" class="flex items-center">
-                            <!-- <div v-for="(proprovider, index) in proclient.provider" :key="index" class="flex items-center"> -->
                               <input type="checkbox" :id="cprovider._id" :name="cprovider._id" :value="cprovider" class="mx-3" v-model="proclient.provider">
                               <label :for="cprovider._id" class="w-1/2">{{ cprovider.name }}</label>
-                              <!-- {{ proclient.provider[index] }} -->
-                              <!-- {{ cprovider }} -->
                               <div class="flex justify-between">
                                 <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(cprovider._id)" />
                                 <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(cprovider._id)" />
                               </div>
-                            <!-- </div> -->
                           </div>
                           <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers.message }} </p>
                         </div>
-                              <!-- {{ proclient.provider }} -->
                       </form>
                     </div>
                   </div>
@@ -137,7 +119,6 @@
 <script setup>
 import { useStore } from 'vuex'
 import { computed, ref, onMounted } from 'vue'
-// import { fetchData, addData, removeData, fetchDataByID, editData } from '../api'
 import { fetchDataByID } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { Icon } from '@iconify/vue'
@@ -259,7 +240,6 @@ const errorCheck = async () => {
       ...newerror
     })
   }
-  console.log(typeof data.phone)
 
   if (!data.phone) {
     newerror.phone = {
@@ -311,7 +291,6 @@ const errorCheck = async () => {
     })
   }
 
-  // (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
   if (!data.email) {
     newerror.email = {
       state: true,
