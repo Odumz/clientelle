@@ -30,7 +30,7 @@
                           <div class="md:w-full">
                             <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
                           </div>
-                          <p v-if="error.name" class="text-xs text-red-500 p-2"> {{ error.name.message }} </p>
+                          <p v-if="error.name" class="text-xs text-red-500 p-2"> {{ error.name }} </p>
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -41,7 +41,7 @@
                           <div class="md:w-full">
                             <input :disabled="editclient" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
                           </div>
-                          <p v-if="error.email" class="text-xs text-red-500 p-2"> {{ error.email.message }} </p>
+                          <p v-if="error.email" class="text-xs text-red-500 p-2"> {{ error.email }} </p>
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -52,7 +52,7 @@
                           <div class="md:w-full">
                             <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="number" placeholder="08054236958">
                           </div>
-                          <p v-if="error.phone" class="text-xs text-red-500 p-2"> {{ error.phone.message }} </p>
+                          <p v-if="error.phone" class="text-xs text-red-500 p-2"> {{ error.phone }} </p>
                         </div>
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
@@ -87,7 +87,7 @@
                                 <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(cprovider._id)" />
                               </div>
                           </div>
-                          <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers.message }} </p>
+                          <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers }} </p>
                         </div>
                       </form>
                     </div>
@@ -225,98 +225,69 @@ const errorCheck = async () => {
   const newerror = error.value
 
   if (!data.provider[0]) {
-    newerror.providers = {
-      state: true,
-      message: 'At least one provider is required to register a client'
-    }
+    newerror.providers = 'At least one provider is required to register a client'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else {
-    newerror.providers = {
-      state: false
-    }
+    newerror.providers = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   }
 
   if (!data.phone) {
-    newerror.phone = {
-      state: true,
-      message: 'Client phone is required'
-    }
+    newerror.phone = 'Client phone is required'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else if (data.phone < 999999999) {
-    newerror.phone = {
-      state: true,
-      message: 'Client phone cannot be less than 10 digits'
-    }
+    newerror.phone = 'Client phone cannot be less than 10 digits'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else {
-    newerror.phone = {
-      state: false
-    }
+    newerror.phone = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   }
 
   if (!data.name) {
-    newerror.name = {
-      state: true,
-      message: 'Client name is required'
-    }
+    newerror.name = 'Client name is required'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else if (data.name.length < 3) {
-    newerror.name = {
-      state: true,
-      message: 'Client name cannot be less than 3 letters'
-    }
+    newerror.name = 'Client name cannot be less than 3 letters'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else {
-    newerror.name = {
-      state: false
-    }
+    newerror.name = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   }
 
   if (!data.email) {
-    newerror.email = {
-      state: true,
-      message: 'Client email is required'
-    }
+    newerror.email = 'Client email is required'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else if (!data.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-    newerror.email = {
-      state: true,
-      message: 'Client email be have email format'
-    }
+    newerror.email = 'Client email be have email format'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   } else {
-    newerror.email = {
-      state: false
-    }
+    newerror.email = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
   }
 
-  if (newerror.name.state || newerror.email.state || newerror.phone.state || newerror.providers.state) {
+  if (newerror.name || newerror.email || newerror.phone || newerror.providers) {
     return true
   }
 }

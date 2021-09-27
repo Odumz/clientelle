@@ -9,23 +9,29 @@ export default {
     loading: false,
     open: false,
     isEditing: false,
+    // errors: {
+    //   name: {
+    //     state: false,
+    //     message: ''
+    //   },
+    //   email: {
+    //     state: false,
+    //     message: ''
+    //   },
+    //   phone: {
+    //     state: false,
+    //     message: ''
+    //   },
+    //   providers: {
+    //     state: false,
+    //     message: ''
+    //   }
+    // },
     errors: {
-      name: {
-        state: false,
-        message: ''
-      },
-      email: {
-        state: false,
-        message: ''
-      },
-      phone: {
-        state: false,
-        message: ''
-      },
-      providers: {
-        state: false,
-        message: ''
-      }
+      name: '',
+      email: '',
+      phone: '',
+      providers: ''
     },
     providererror: {
       state: false,
