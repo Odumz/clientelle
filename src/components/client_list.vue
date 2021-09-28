@@ -77,8 +77,8 @@
                 </div>
                 <div>
                   Provider:
-                  <span v-for="provider in person.provider" :key="provider._id">
-                    {{ provider.name }},
+                  <span>
+                    {{ person.provider.map((e) => e.name).join(', ') }}
                   </span>
                 </div>
               </div>

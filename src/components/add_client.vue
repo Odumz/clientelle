@@ -8,7 +8,7 @@
 
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" enter-to="opacity-100 translate-y-0 sm:scale-100" leave="ease-in duration-200" leave-from="opacity-100 translate-y-0 sm:scale-100" leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
-          <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div class="sm:flex sm:items-start">
                 <div @keyup.esc="close(); cancelEdit();" class="mt-3 text-center sm:mt-0 sm:text-left">
@@ -20,7 +20,7 @@
                   <hr class="my-3 w-full -ml-10 px-64" />
                   <div class="mt-6">
                     <div class="flex justify-center">
-                      <form class="w-full max-w-sm center">
+                      <form class="w-full max-w-md center">
                         <div class="md:flex md:items-center mb-6">
                           <div class="md:w-1/5">
                             <label class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
@@ -60,12 +60,12 @@
                               Provider:
                             </label>
                           </div>
-                          <div class="md:grid md:grid-cols-4 md:w-2/3 items-center">
-                            <div class="md:w6/7 col-span-3 flex">
+                          <div class="md:grid md:grid-cols-7 md:w-4/5 items-center ">
+                            <div class="col-span-4 flex">
                               <input v-model="newProvider.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
                               <Icon v-if="editing" icon="akar-icons:circle-x" class="m-3" @click.prevent="cancelEdit" />
                             </div>
-                            <div class="w-full col-span-1 md:mt-0 mt-2">
+                            <div class="w-full col-span-3 md:mt-0 mt-2">
                               <button v-if="!editing" type="button" class="mt-3 inline-flex bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
                                 Add Provider
                               </button>
@@ -78,7 +78,7 @@
                           <p v-if="providererror.state" class="text-xs col-span-4 text-red-500"> {{ providererror.message }} </p>
                           </div>
                         </div>
-                        <div class="md:w-2/3 md:ml-12 md:-mt-5 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
+                        <div class="md:w-2/3 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <div v-for="(cprovider, index) in provider" :key="index" class="flex items-center">
                               <input type="checkbox" :id="cprovider._id" :name="cprovider._id" :value="cprovider" class="mx-3" v-model="proclient.provider">
                               <label :for="cprovider._id" class="w-1/2">{{ cprovider.name }}</label>
@@ -241,7 +241,7 @@ const errorCheck = async () => {
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
-  } else if (data.phone.toString().match(/[0-9]{10,}/)) {
+  } else if (!data.phone.toString().match(/[0-9]{10,}/)) {
     newerror.phone = 'Client phone cannot be less than 10 digits'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
