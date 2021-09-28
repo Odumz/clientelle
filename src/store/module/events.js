@@ -1,32 +1,12 @@
 import { computed } from 'vue'
 import * as mutationTypes from '../constants/mutations'
 import * as actionTypes from '../constants/actions'
-// import axios from 'axios'
-// import { fetchClient } from '../api'
 
 export default {
   state: () => ({
     loading: false,
     open: false,
     isEditing: false,
-    // errors: {
-    //   name: {
-    //     state: false,
-    //     message: ''
-    //   },
-    //   email: {
-    //     state: false,
-    //     message: ''
-    //   },
-    //   phone: {
-    //     state: false,
-    //     message: ''
-    //   },
-    //   providers: {
-    //     state: false,
-    //     message: ''
-    //   }
-    // },
     errors: {
       name: '',
       email: '',

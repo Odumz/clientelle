@@ -5,7 +5,7 @@ import { fetchData, addData, editData, removeData } from '../../api'
 
 export default {
   state: () => ({
-    providers: ''
+    providers: []
   }),
   getters: {
     getProviders: (state) => {
@@ -24,9 +24,9 @@ export default {
     [mutationTypes.DeleteProvider] (state, id) {
       state.providers = state.providers.filter(provider => provider.id !== id)
     },
-    [mutationTypes.UpdateProvider] (state, providers) {
+    [mutationTypes.UpdateProvider] (state, updatedprovider) {
       state.providers = state.providers.map(provider => (
-        provider._id === providers._id ? { ...provider, ...providers } : provider
+        provider._id === updatedprovider._id ? { ...provider, ...updatedprovider } : provider
       ))
     }
   },
@@ -45,7 +45,7 @@ export default {
       await commit(mutationTypes.SetProvider, newprovider)
       await dispatch(actionTypes.FetchProviders)
     },
-    async [actionTypes.RemoveProvider] ({ dispatch, commit }, providerUrl) {
+    async [actionTypes.RemoveProvider] ({ dispatch }, providerUrl) {
       await removeData(providerUrl)
       await dispatch(actionTypes.FetchProviders)
       await dispatch(actionTypes.FetchClients)

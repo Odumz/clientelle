@@ -241,7 +241,7 @@ const errorCheck = async () => {
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
-  } else if (data.phone < 999999999) {
+  } else if (data.phone.toString().match(/[0-9]{10,}/)) {
     newerror.phone = 'Client phone cannot be less than 10 digits'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror

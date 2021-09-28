@@ -7,7 +7,7 @@ import { addData, fetchData, editData, removeData } from '../../api'
 
 export default {
   state: () => ({
-    clients: '',
+    clients: [],
     proclients: {
       name: '',
       email: '',
@@ -31,8 +31,8 @@ export default {
     [mutationTypes.GetClients] (state, clients) {
       state.clients = clients
     },
-    [mutationTypes.SetClient] (state, clients) {
-      state.clients = [...state.clients, clients]
+    [mutationTypes.SetClient] (state, client) {
+      state.clients = [...state.clients, client]
     },
     [mutationTypes.SetProclient] (state, proclient) {
       state.proclients = proclient
@@ -40,9 +40,9 @@ export default {
     [mutationTypes.DeleteClient] (state, id) {
       state.clients = state.clients.filter(client => client.id !== id)
     },
-    [mutationTypes.UpdateClient] (state, clients) {
+    [mutationTypes.UpdateClient] (state, updatedclient) {
       state.clients = state.clients.map(client => (
-        client.id === clients.id ? { ...client, ...clients } : client
+        client.id === updatedclient.id ? { ...client, ...updatedclient } : client
       ))
     }
   },
