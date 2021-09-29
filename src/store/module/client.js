@@ -1,8 +1,6 @@
 import { computed } from 'vue'
 import * as mutationTypes from '../constants/mutations'
 import * as actionTypes from '../constants/actions'
-// import axios from 'axios'
-// import { fetchData, fetchDataByID, addData, editData, removeData } from '../api'
 import { addData, fetchData, editData, removeData } from '../../api'
 
 export default {

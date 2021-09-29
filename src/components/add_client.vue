@@ -80,7 +80,7 @@
                         </div>
                         <div class="md:w-2/3 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <div v-for="(cprovider, index) in provider" :key="index" class="flex items-center">
-                              <input type="checkbox" :id="cprovider._id" :name="cprovider._id" :value="cprovider" class="mx-3" v-model="proclient.provider">
+                              <input type="checkbox" :value="cprovider" :id="cprovider._id" class="mx-3" v-model="proclient.provider">
                               <label :for="cprovider._id" class="w-1/2">{{ cprovider.name }}</label>
                               <div class="flex justify-between">
                                 <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(cprovider._id)" />
@@ -180,7 +180,7 @@ const provider = computed(() => {
 const oldProclient = JSON.parse(JSON.stringify(store.getters.getProclients.value))
 
 const proclient = computed(() => {
-  return JSON.parse(JSON.stringify(store.getters.getProclients.value))
+  return store.getters.getProclients.value
 })
 
 const editclient = computed(() => {
