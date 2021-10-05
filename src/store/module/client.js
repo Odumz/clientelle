@@ -46,7 +46,7 @@ export default {
   },
   actions: {
     async [actionTypes.FetchClients] ({ commit }) {
-      const url = `${process.env.VUE_APP_API_URL}/clients/all`
+      const url = '/clients/all'
       const data = await fetchData(url)
       await commit(mutationTypes.GetClients, data.clients)
     },
@@ -61,7 +61,7 @@ export default {
       await dispatch(actionTypes.FetchClients)
     },
     async [actionTypes.EditClient] ({ dispatch, commit }, payload) {
-      const url = `${process.env.VUE_APP_API_URL}/clients/edit/${payload._id}`
+      const url = `/clients/edit/${payload._id}`
       const { _id, email, ...rest } = payload
       await editData(url, rest)
       await dispatch(actionTypes.UpdateOpenStatus, false)

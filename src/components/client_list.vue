@@ -122,14 +122,14 @@ onMounted(async () => {
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
+  const url = `/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 
 const onEdit = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  const url = `${process.env.VUE_APP_API_URL}/clients/${id}`
+  const url = `/clients/${id}`
   const editData = await fetchDataByID(url)
   await store.dispatch(actionTypes.UpdateProclient, editData.client)
   await store.dispatch(actionTypes.UpdateTitle, 'Edit')

@@ -32,7 +32,7 @@ export default {
   },
   actions: {
     async [actionTypes.FetchProviders] ({ commit }) {
-      const url = `${process.env.VUE_APP_API_URL}/providers/all`
+      const url = '/providers/all'
       const data = await fetchData(url)
       await commit(mutationTypes.GetProviders, data.providers)
     },
@@ -51,7 +51,7 @@ export default {
       await dispatch(actionTypes.FetchClients)
     },
     async [actionTypes.EditProvider] ({ dispatch, commit }, provider) {
-      const url = `${process.env.VUE_APP_API_URL}/providers/edit/${provider._id}`
+      const url = `/providers/edit/${provider._id}`
       const { _id, ...data } = provider
       await editData(url, data)
       await commit(mutationTypes.UpdateProvider, provider._id)

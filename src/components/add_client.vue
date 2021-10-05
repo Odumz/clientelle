@@ -164,7 +164,7 @@ const providererror = computed(() => {
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
-  const url = `${process.env.VUE_APP_API_URL}/clients/delete/${id}`
+  const url = `/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
   await store.dispatch(actionTypes.UpdateOpenStatus, false)
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
@@ -300,12 +300,12 @@ const onEditClient = async () => {
 }
 
 const deleteProvider = async (id) => {
-  const url = `${process.env.VUE_APP_API_URL}/providers/delete/${id}`
+  const url = `/providers/delete/${id}`
   await store.dispatch(actionTypes.RemoveProvider, url)
 }
 
 const editProvider = async (id) => {
-  const url = `${process.env.VUE_APP_API_URL}/providers/${id}`
+  const url = `/providers/${id}`
   const editData = await fetchDataByID(url)
   newProvider.value = editData.provider
   await store.dispatch(actionTypes.UpdateEditingStatus, true)
@@ -314,7 +314,7 @@ const editProvider = async (id) => {
 const onSubmit = async () => {
   const newerrors = await errorCheck()
   if (!newerrors) {
-    const url = `${process.env.VUE_APP_API_URL}/clients/add`
+    const url = '/clients/add'
     const newData = {
       url: url,
       data: proclient.value
@@ -330,7 +330,7 @@ const onSubmit = async () => {
 const addProvider = async () => {
   const newerrors = await providerErrorCheck()
   if (!newerrors) {
-    const url = `${process.env.VUE_APP_API_URL}/providers/add`
+    const url = '/providers/add'
     const data = JSON.parse(JSON.stringify(newProvider.value))
     const newData = {
       url: url,
@@ -350,7 +350,7 @@ const saveProvider = async () => {
     newProvider.value.name = ''
     await store.dispatch(actionTypes.FetchProviders)
     await store.getters.getClients.value
-    const updatedClient = await fetchDataByID(`${process.env.VUE_APP_API_URL}/clients/${proclient.value._id}`)
+    const updatedClient = await fetchDataByID(`/clients/${proclient.value._id}`)
     await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
   }
 }
