@@ -48,10 +48,12 @@ export default {
     }
   },
   actions: {
-    async [actionTypes.FetchClients] ({ commit }) {
+    async [actionTypes.FetchClients] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
       const url = '/clients/all'
       const data = await fetchData(url)
       await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
     },
     async [actionTypes.SortClients] ({ commit }) {
       const url = '/clients/all?sortBy=createdAt:asc'

@@ -96,7 +96,12 @@
             </div>
           </div>
           <div v-else>
-            <empty-list @addClient="onAdd" />
+            <div v-if="loadingState" class="inline-flex justify-center items-center">
+              Loading <span><img class="mx-3 w-9" src="https://res.cloudinary.com/griffintech/image/upload/v1633501742/loading_slh6hl.svg" alt="loading..." /></span>
+            </div>
+            <div v-else>
+              <empty-list @addClient="onAdd" />
+            </div>
           </div>
           <div>
           </div>
