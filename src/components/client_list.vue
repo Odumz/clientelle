@@ -3,8 +3,12 @@
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="flex py-5 justify-between items-center pl-14 pr-12 bg-gray-100">
-          <h1 class="text-2xl text-blue-500 font-bold">
-            Clients
+          <h1 class="text-5xl text-blue-500 font-light title">
+            <span class="title-wrapper">
+              <span class="letters">
+                Clientelle
+              </span>
+            </span>
           </h1>
           <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
         </div>
@@ -12,8 +16,11 @@
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
+                <th scope="col" class="flex justify-center items-center px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Name
+                  <span class="opacity-0 hover:opacity-100">
+                    <Icon icon="ant-design:caret-up-outlined" class="mx-1" @click.prevent="clientAscendingOrder()" />
+                  </span>
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Email
@@ -106,12 +113,33 @@ import { fetchDataByID } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
 import * as actionTypes from '../store/constants/actions'
+// import anime from 'animejs'
 
 const store = useStore()
 
 const proclients = computed(() => {
   return store.getters.getClients.value
 })
+
+// const titleWrapper = document.body.getElementsByTagName('span')
+// console.log('titlewrapper o', titleWrapper)
+// console.log('document is', document.body.getElementsByClassName('title'))
+// console.log('titlewrapper inside ', titleWrapper)
+// titleWrapper.innerHTML = titleWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>")
+// anime.timeline({ loop: true })
+//   .add({
+//     targets: '.title . letter',
+//     scale: [0, 1],
+//     duration: 1500,
+//     elasticity: 600,
+//     delay: (el, i) => 45 * (i + 1)
+//   }).add({
+//     targets: '.ml9',
+//     opacity: 0,
+//     duration: 1000,
+//     easing: 'easeOutExpo',
+//     delay: 1000
+//   })
 
 const loadingState = computed(() => store.getters.getLoadingState.value)
 
@@ -138,6 +166,10 @@ const onEdit = async (id) => {
   await store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 
+const clientAscendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClients)
+}
+
 const onAdd = async () => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
   store.dispatch(actionTypes.UpdateTitle, 'New')
@@ -145,3 +177,24 @@ const onAdd = async () => {
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 </script>
+
+<style>
+  /* .title {
+  position: relative;
+}
+
+.title .title-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 0.2em;
+  padding-right: 0.05em;
+  padding-bottom: 0.1em;
+  overflow: hidden;
+}
+
+.title .letter {
+  transform-origin: 50% 100%;
+  display: inline-block;
+  line-height: 1em;
+} */
+</style>

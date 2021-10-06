@@ -29,6 +29,9 @@ export default {
     [mutationTypes.GetClients] (state, clients) {
       state.clients = clients
     },
+    [mutationTypes.SortClients] (state, clients) {
+      state.clients = clients
+    },
     [mutationTypes.SetClient] (state, client) {
       state.clients = [...state.clients, client]
     },
@@ -47,6 +50,11 @@ export default {
   actions: {
     async [actionTypes.FetchClients] ({ commit }) {
       const url = '/clients/all'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+    },
+    async [actionTypes.SortClients] ({ commit }) {
+      const url = '/clients/all?sortBy=createdAt:asc'
       const data = await fetchData(url)
       await commit(mutationTypes.GetClients, data.clients)
     },
