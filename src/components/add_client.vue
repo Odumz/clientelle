@@ -50,7 +50,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="number" placeholder="08054236958">
+                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="tel" placeholder="08054236958">
                           </div>
                           <p v-if="error.phone" class="text-xs text-red-500 p-2"> {{ error.phone }} </p>
                         </div>
@@ -89,7 +89,7 @@
                           </div>
                           <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers }} </p>
                         </div>
-                        <div v-else class="md:w-2/3 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
+                        <div v-else class="md:w-5/7 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <empty-list text="No data" @event="onAdd" hide="hidden">
                             <Icon icon="carbon:data-error" class="mr-4" />
                             <p>No data</p>
@@ -246,6 +246,11 @@ const errorCheck = async () => {
 
   if (!data.phone) {
     newerror.phone = 'Client phone is required'
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newerror
+    })
+  } else if (isNaN(data.phone)) {
+    newerror.phone = 'Client phone must be digits'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newerror
     })
