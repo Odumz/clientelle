@@ -78,15 +78,22 @@
                           <p v-if="providererror.state" class="text-xs col-span-4 text-red-500"> {{ providererror.message }} </p>
                           </div>
                         </div>
-                        <div class="md:w-2/3 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
+                        <div v-if="provider.length > 0" class="md:w-2/3 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
                           <div v-for="(cprovider, index) in provider" :key="index" class="flex items-center">
                               <input type="checkbox" :value="cprovider" :id="cprovider._id" class="mx-3" v-model="proclient.provider">
                               <label :for="cprovider._id" class="w-1/2">{{ cprovider.name }}</label>
                               <div class="flex justify-between">
-                                <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="editProvider(cprovider._id)" />
-                                <Icon icon="fluent:delete-24-filled" @click.prevent="deleteProvider(cprovider._id)" />
+                                <Icon icon="bx:bxs-edit" class="mx-4 cursor-pointer" @click.prevent="editProvider(cprovider._id)" />
+                                <Icon icon="fluent:delete-24-filled" class="cursor-pointer" @click.prevent="deleteProvider(cprovider._id)" />
                               </div>
                           </div>
+                          <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers }} </p>
+                        </div>
+                        <div v-else class="md:w-2/3 md:ml-12 px-6 py-5 grid items-center shadow-md justify-center border rounded-md">
+                          <empty-list text="No data" @event="onAdd" hide="hidden">
+                            <Icon icon="carbon:data-error" class="mr-4" />
+                            <p>No data</p>
+                          </empty-list>
                           <p v-if="error.providers" class="text-xs text-red-500 p-2"> {{ error.providers }} </p>
                         </div>
                       </form>
@@ -122,6 +129,7 @@ import { computed, ref, onMounted } from 'vue'
 import { fetchDataByID } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { Icon } from '@iconify/vue'
+import emptyList from '@/components/empty_list.vue'
 import * as actionTypes from '../store/constants/actions'
 
 const store = useStore()

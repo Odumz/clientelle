@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+      <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 ">
         <div class="flex py-5 justify-between items-center pl-14 pr-12 bg-gray-100">
-          <h1 class="text-5xl text-blue-500 font-light title">
+          <h1 class="md:text-5xl text-2xl text-blue-500 font-light title">
             <span class="title-wrapper">
               <span class="letters">
                 Clientelle
@@ -12,7 +12,7 @@
           </h1>
           <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
         </div>
-        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <div class="shadow overflow-hidden sm:rounded-lg">
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
             <thead class="bg-gray-50">
               <tr>
@@ -100,7 +100,9 @@
               Loading <span><img class="mx-3 w-9" src="https://res.cloudinary.com/griffintech/image/upload/v1633501742/loading_slh6hl.svg" alt="loading..." /></span>
             </div>
             <div v-else>
-              <empty-list @addClient="onAdd" />
+              <empty-list @event="onAdd">
+                <p>Looks like no data was found.</p>
+              </empty-list>
             </div>
           </div>
           <div>
