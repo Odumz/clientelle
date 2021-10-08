@@ -309,10 +309,10 @@ const onEditClient = async () => {
   const newerrors = await errorCheck()
   if (!newerrors) {
     await store.dispatch(actionTypes.EditClient, proclient.value)
+    setTimeout(() => {
+      store.dispatch(actionTypes.UpdateProclient, oldProclient)
+    }, 500)
   }
-  setTimeout(() => {
-    store.dispatch(actionTypes.UpdateProclient, oldProclient)
-  }, 500)
 }
 
 const deleteProvider = async (id) => {
