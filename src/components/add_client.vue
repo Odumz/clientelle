@@ -398,9 +398,7 @@ const addProvider = async () => {
   const newErrors = await providerErrorCheck()
   if (!newErrors) {
     const url = '/providers/add'
-    console.log('url is', url)
     const data = providerName
-    console.log(data)
     const newData = {
       url: url,
       data: data
@@ -419,8 +417,7 @@ const addProvider = async () => {
 const saveProvider = async () => {
   const newErrors = await providerErrorCheck()
   if (!newErrors) {
-    // const data = JSON.parse(JSON.stringify(newProvider))
-    // console.log('data', data)
+    newProvider.name = providerName.name
     await store.dispatch(actionTypes.EditProvider, newProvider)
     await store.dispatch(actionTypes.UpdateEditingStatus, false)
     Swal.fire({
@@ -432,9 +429,11 @@ const saveProvider = async () => {
     providerName.name = ''
     await store.dispatch(actionTypes.FetchProviders)
     await store.getters.getClients.value
-    console.log('proclient', proclient.value)
-    const updatedClient = await fetchDataByParams(`/clients/${proclient.value._id}`)
-    await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
+    const client = JSON.parse(JSON.stringify(proclient.value))
+    if (client.name) {
+      const updatedClient = await fetchDataByParams(`/clients/${client._id}`)
+      await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
+    }
   }
 }
 
