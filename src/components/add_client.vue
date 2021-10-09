@@ -39,7 +39,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input :disabled="editclient" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
+                            <input :disabled="editclient" @blur="emailCheck(proclient.email)" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
                           </div>
                           <p v-if="error.email" class="text-xs text-red-500 p-2"> {{ error.email }} </p>
                         </div>
@@ -62,11 +62,11 @@
                           </div>
                           <div class="md:grid md:grid-cols-7 md:w-4/5 items-center ">
                             <div class="col-span-4 flex">
-                              <input v-model="newProvider.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
+                              <input v-model="providerName.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
                               <Icon v-if="editing" icon="akar-icons:circle-x" class="m-3" @click.prevent="cancelEdit" />
                             </div>
                             <div class="w-full col-span-3 md:mt-0 mt-2">
-                              <button v-if="!editing" type="button" class="mt-3 inline-flex bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider">
+                              <button v-if="!editing" type="button" class="mt-3 inline-flex bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider(newProvider.name)">
                                 Add Provider
                               </button>
                               <div class="relative px-1" v-else>
@@ -103,7 +103,7 @@
               </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse flex-col-reverse">
-              <button v-if="!editclient" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
+              <button v-if="!editclient" :disabled="submission.state" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
                 Add Client
               </button>
               <button v-else type="button" class="sm:my-0 my-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onEditClient">
@@ -125,12 +125,13 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { computed, ref, onMounted } from 'vue'
-import { fetchDataByID } from '../api'
+import { computed, reactive, onMounted } from 'vue'
+import { fetchDataByParams } from '../api'
 import { Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { Icon } from '@iconify/vue'
 import emptyList from '@/components/empty_list.vue'
 import * as actionTypes from '../store/constants/actions'
+import Swal from 'sweetalert2'
 
 const store = useStore()
 
@@ -158,8 +159,14 @@ const olderror = JSON.parse(JSON.stringify(store.getters.getErrorStatus.value))
 
 const oldprovidererror = JSON.parse(JSON.stringify(store.getters.getProviderErrorStatus.value))
 
-const newProvider = ref({
+let newProvider = reactive({})
+
+const providerName = reactive({
   name: ''
+})
+
+const submission = reactive({
+  state: false
 })
 
 const error = computed(() => {
@@ -175,6 +182,12 @@ const onDelete = async (id) => {
   const url = `/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
   await store.dispatch(actionTypes.UpdateOpenStatus, false)
+  Swal.fire({
+    title: 'Successful!',
+    text: 'Client data deleted',
+    timer: 1500,
+    icon: 'success'
+  })
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
   setTimeout(() => {
     store.dispatch(actionTypes.UpdateProclient, oldProclient)
@@ -201,26 +214,26 @@ const cancelEdit = async () => {
 }
 
 const providerErrorCheck = async () => {
-  const data = JSON.parse(JSON.stringify(newProvider.value))
-  const newerror = providererror.value
+  const data = newProvider.name
+  const newError = providererror.value
 
-  if (!data.name) {
-    newerror.name = {
+  if (!data) {
+    newError.name = {
       state: true,
       message: 'Provider name is required'
     }
-    store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
-  } else if (data.name.length < 3) {
-    newerror.name = {
+    store.dispatch(actionTypes.UpdateProviderErrorStatus, newError.name)
+  } else if (data.length < 3) {
+    newError.name = {
       state: true,
       message: 'Provider name cannot be less than 3 letters'
     }
-    store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
+    store.dispatch(actionTypes.UpdateProviderErrorStatus, newError.name)
   } else {
-    newerror.name = {
+    newError.name = {
       state: false
     }
-    store.dispatch(actionTypes.UpdateProviderErrorStatus, newerror.name)
+    store.dispatch(actionTypes.UpdateProviderErrorStatus, newError.name)
   }
 
   if (providererror.value.state) {
@@ -230,85 +243,110 @@ const providerErrorCheck = async () => {
 
 const errorCheck = async () => {
   const data = proclient.value
-  const newerror = error.value
+  const newError = error.value
 
   if (!data.provider[0]) {
-    newerror.providers = 'At least one provider is required to register a client'
+    newError.providers = 'At least one provider is required to register a client'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else {
-    newerror.providers = ''
+    newError.providers = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   }
 
   if (!data.phone) {
-    newerror.phone = 'Client phone is required'
+    newError.phone = 'Client phone is required'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else if (isNaN(data.phone)) {
-    newerror.phone = 'Client phone must be digits'
+    newError.phone = 'Client phone must be digits'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else if (!data.phone.toString().match(/[0-9]{10,}/)) {
-    newerror.phone = 'Client phone cannot be less than 10 digits'
+    newError.phone = 'Client phone cannot be less than 10 digits'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else {
-    newerror.phone = ''
+    newError.phone = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   }
 
   if (!data.name) {
-    newerror.name = 'Client name is required'
+    newError.name = 'Client name is required'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else if (data.name.length < 3) {
-    newerror.name = 'Client name cannot be less than 3 letters'
+    newError.name = 'Client name cannot be less than 3 letters'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else {
-    newerror.name = ''
+    newError.name = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   }
 
   if (!data.email) {
-    newerror.email = 'Client email is required'
+    newError.email = 'Client email is required'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else if (!data.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-    newerror.email = 'Client email be have email format'
+    newError.email = 'Client email be have email format'
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   } else {
-    newerror.email = ''
+    newError.email = ''
     store.dispatch(actionTypes.UpdateErrorStatus, {
-      ...newerror
+      ...newError
     })
   }
 
-  if (newerror.name || newerror.email || newerror.phone || newerror.providers) {
+  if (newError.name || newError.email || newError.phone || newError.providers) {
     return true
   }
 }
 
+const emailCheck = async (email) => {
+  const url = `/clients/all?email=${email}`
+  const emailExists = await fetchDataByParams(url)
+  const newError = error.value
+  if (emailExists.clients.length > 0) {
+    newError.email = 'Email already exists'
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newError
+    })
+    submission.state = true
+  } else {
+    newError.email = ''
+    store.dispatch(actionTypes.UpdateErrorStatus, {
+      ...newError
+    })
+    submission.state = false
+  }
+}
+
 const onEditClient = async () => {
-  const newerrors = await errorCheck()
-  if (!newerrors) {
+  const newErrors = await errorCheck()
+  if (!newErrors) {
     await store.dispatch(actionTypes.EditClient, proclient.value)
+    Swal.fire({
+      title: 'Successful!',
+      text: 'Client data updated',
+      timer: 1500,
+      icon: 'success'
+    })
     setTimeout(() => {
       store.dispatch(actionTypes.UpdateProclient, oldProclient)
     }, 500)
@@ -318,18 +356,26 @@ const onEditClient = async () => {
 const deleteProvider = async (id) => {
   const url = `/providers/delete/${id}`
   await store.dispatch(actionTypes.RemoveProvider, url)
+  Swal.fire({
+    title: 'Successful!',
+    text: 'Provider data deleted',
+    timer: 1500,
+    icon: 'success'
+  })
 }
 
 const editProvider = async (id) => {
   const url = `/providers/${id}`
-  const editData = await fetchDataByID(url)
-  newProvider.value = editData.provider
+  const editData = await fetchDataByParams(url)
+  newProvider = editData.provider
+  console.log(newProvider)
+  providerName.name = editData.provider.name
   await store.dispatch(actionTypes.UpdateEditingStatus, true)
 }
 
 const onSubmit = async () => {
-  const newerrors = await errorCheck()
-  if (!newerrors) {
+  const newErrors = await errorCheck()
+  if (!newErrors) {
     const url = '/clients/add'
     const newData = {
       url: url,
@@ -337,6 +383,12 @@ const onSubmit = async () => {
     }
     await store.dispatch(actionTypes.AddClient, newData)
     await store.dispatch(actionTypes.UpdateOpenStatus, false)
+    Swal.fire({
+      title: 'Successful!',
+      text: 'Client data added',
+      timer: 1500,
+      icon: 'success'
+    })
     setTimeout(() => {
       store.dispatch(actionTypes.UpdateProclient, oldProclient)
     }, 500)
@@ -344,29 +396,47 @@ const onSubmit = async () => {
 }
 
 const addProvider = async () => {
-  const newerrors = await providerErrorCheck()
-  if (!newerrors) {
+  const newErrors = await providerErrorCheck()
+  if (!newErrors) {
     const url = '/providers/add'
-    const data = JSON.parse(JSON.stringify(newProvider.value))
+    const data = JSON.parse(JSON.stringify(newProvider))
     const newData = {
       url: url,
       data: data
     }
     await store.dispatch(actionTypes.AddProvider, newData)
-    newProvider.value.name = ''
+    Swal.fire({
+      title: 'Successful!',
+      text: 'Provider data added',
+      timer: 1500,
+      icon: 'success'
+    })
+    newProvider.name = ''
   }
 }
 
 const saveProvider = async () => {
-  const newerrors = await providerErrorCheck()
-  if (!newerrors) {
-    const data = JSON.parse(JSON.stringify(newProvider.value))
-    await store.dispatch(actionTypes.EditProvider, data)
+  const newErrors = await providerErrorCheck()
+  console.log('tag, you\'re it')
+  if (!newErrors) {
+    console.log('tag, you\'re it 2')
+    console.log('newpro pro', newProvider)
+    const data = JSON.parse(JSON.stringify(newProvider))
+    console.log('data', data)
+    await store.dispatch(actionTypes.EditProvider, newProvider)
+    console.log('hi oh')
     await store.dispatch(actionTypes.UpdateEditingStatus, false)
-    newProvider.value.name = ''
+    console.log('wawu')
+    Swal.fire({
+      title: 'Successful!',
+      text: 'Provider data updated',
+      timer: 1500,
+      icon: 'success'
+    })
+    newProvider.name = ''
     await store.dispatch(actionTypes.FetchProviders)
     await store.getters.getClients.value
-    const updatedClient = await fetchDataByID(`/clients/${proclient.value._id}`)
+    const updatedClient = await fetchDataByParams(`/clients/${proclient.value._id}`)
     await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
   }
 }

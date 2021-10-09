@@ -116,10 +116,11 @@
 <script setup>
 import { useStore } from 'vuex'
 import { onMounted, computed } from 'vue'
-import { fetchDataByID } from '../api'
+import { fetchDataByParams } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
 import * as actionTypes from '../store/constants/actions'
+import Swal from 'sweetalert2'
 // import anime from 'animejs'
 
 const store = useStore()
@@ -159,13 +160,19 @@ const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
   const url = `/clients/delete/${id}`
   await store.dispatch(actionTypes.RemoveClient, url)
+  Swal.fire({
+    title: 'Successful!',
+    text: 'Client deleted',
+    timer: 1500,
+    icon: 'success'
+  })
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 
 const onEdit = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
   const url = `/clients/${id}`
-  const editData = await fetchDataByID(url)
+  const editData = await fetchDataByParams(url)
   await store.dispatch(actionTypes.UpdateProclient, editData.client)
   await store.dispatch(actionTypes.UpdateTitle, 'Edit')
   await store.dispatch(actionTypes.UpdateOpenStatus, true)

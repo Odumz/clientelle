@@ -19,7 +19,6 @@ const props = defineProps({
 const emit = defineEmits(['event'])
 
 const eventHandler = () => {
-  console.log('i got here')
   emit('event')
 }
 

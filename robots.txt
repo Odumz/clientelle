@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: 
-
-Sitemap: https://clientelle.vercel.app/sitemap.xml
