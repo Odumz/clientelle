@@ -209,12 +209,12 @@ const editclient = computed(() => {
 })
 
 const cancelEdit = async () => {
-  newProvider.value.name = ''
+  providerName.name = ''
   store.dispatch(actionTypes.UpdateEditingStatus, false)
 }
 
 const providerErrorCheck = async () => {
-  const data = newProvider.name
+  const data = providerName.name
   const newError = providererror.value
 
   if (!data) {
@@ -398,19 +398,21 @@ const addProvider = async () => {
   const newErrors = await providerErrorCheck()
   if (!newErrors) {
     const url = '/providers/add'
-    const data = JSON.parse(JSON.stringify(newProvider))
+    console.log('url is', url)
+    const data = providerName
+    console.log(data)
     const newData = {
       url: url,
       data: data
     }
     await store.dispatch(actionTypes.AddProvider, newData)
+    providerName.name = ''
     Swal.fire({
       title: 'Successful!',
       text: 'Provider data added',
       timer: 1500,
       icon: 'success'
     })
-    newProvider.name = ''
   }
 }
 
@@ -427,9 +429,10 @@ const saveProvider = async () => {
       timer: 1500,
       icon: 'success'
     })
-    newProvider.name = ''
+    providerName.name = ''
     await store.dispatch(actionTypes.FetchProviders)
     await store.getters.getClients.value
+    console.log('proclient', proclient.value)
     const updatedClient = await fetchDataByParams(`/clients/${proclient.value._id}`)
     await store.dispatch(actionTypes.UpdateProclient, updatedClient.client)
   }
