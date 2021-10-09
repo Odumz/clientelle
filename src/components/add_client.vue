@@ -368,7 +368,6 @@ const editProvider = async (id) => {
   const url = `/providers/${id}`
   const editData = await fetchDataByParams(url)
   newProvider = editData.provider
-  console.log(newProvider)
   providerName.name = editData.provider.name
   await store.dispatch(actionTypes.UpdateEditingStatus, true)
 }
@@ -417,16 +416,11 @@ const addProvider = async () => {
 
 const saveProvider = async () => {
   const newErrors = await providerErrorCheck()
-  console.log('tag, you\'re it')
   if (!newErrors) {
-    console.log('tag, you\'re it 2')
-    console.log('newpro pro', newProvider)
-    const data = JSON.parse(JSON.stringify(newProvider))
-    console.log('data', data)
+    // const data = JSON.parse(JSON.stringify(newProvider))
+    // console.log('data', data)
     await store.dispatch(actionTypes.EditProvider, newProvider)
-    console.log('hi oh')
     await store.dispatch(actionTypes.UpdateEditingStatus, false)
-    console.log('wawu')
     Swal.fire({
       title: 'Successful!',
       text: 'Provider data updated',
