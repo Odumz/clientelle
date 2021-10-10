@@ -16,11 +16,8 @@
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="flex justify-center items-center px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
+                <th scope="col" class="flex items-center ml-3 px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Name
-                  <span class="opacity-0 hover:opacity-100">
-                    <Icon icon="ant-design:caret-up-outlined" class="mx-1" @click.prevent="clientAscendingOrder()" />
-                  </span>
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Email
@@ -34,7 +31,13 @@
                 <th scope="col" class="relative px-6 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
-                <th scope="col" class="relative px-6 py-3">
+                <th scope="col" class="flex relative items-center px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
+                  <span class="absolute bottom-1">
+                    <Icon icon="ant-design:caret-up-outlined" class="mx-1" @click.prevent="clientAscendingOrder()" />
+                  </span>
+                  <span class="absolute top-4">
+                    <Icon icon="ant-design:caret-down-outlined" class="mx-1" @click.prevent="clientDescendingOrder()" />
+                  </span>
                 </th>
               </tr>
             </thead>
@@ -115,39 +118,20 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { fetchDataByParams } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
 import * as actionTypes from '../store/constants/actions'
 import Swal from 'sweetalert2'
-// import anime from 'animejs'
 
 const store = useStore()
+
+const sorted = ref(false)
 
 const proclients = computed(() => {
   return store.getters.getClients.value
 })
-
-// const titleWrapper = document.body.getElementsByTagName('span')
-// console.log('titlewrapper o', titleWrapper)
-// console.log('document is', document.body.getElementsByClassName('title'))
-// console.log('titlewrapper inside ', titleWrapper)
-// titleWrapper.innerHTML = titleWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>")
-// anime.timeline({ loop: true })
-//   .add({
-//     targets: '.title . letter',
-//     scale: [0, 1],
-//     duration: 1500,
-//     elasticity: 600,
-//     delay: (el, i) => 45 * (i + 1)
-//   }).add({
-//     targets: '.ml9',
-//     opacity: 0,
-//     duration: 1000,
-//     easing: 'easeOutExpo',
-//     delay: 1000
-//   })
 
 const loadingState = computed(() => store.getters.getLoadingState.value)
 
@@ -182,6 +166,12 @@ const onEdit = async (id) => {
 
 const clientAscendingOrder = async () => {
   await store.dispatch(actionTypes.SortClients)
+  sorted.value = true
+}
+
+const clientDescendingOrder = async () => {
+  await store.dispatch(actionTypes.FetchClients)
+  sorted.value = false
 }
 
 const onAdd = async () => {
@@ -191,24 +181,3 @@ const onAdd = async () => {
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 </script>
-
-<style>
-  /* .title {
-  position: relative;
-}
-
-.title .title-wrapper {
-  position: relative;
-  display: inline-block;
-  padding-top: 0.2em;
-  padding-right: 0.05em;
-  padding-bottom: 0.1em;
-  overflow: hidden;
-}
-
-.title .letter {
-  transform-origin: 50% 100%;
-  display: inline-block;
-  line-height: 1em;
-} */
-</style>
