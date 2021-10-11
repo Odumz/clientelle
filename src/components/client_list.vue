@@ -16,28 +16,38 @@
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
             <thead class="bg-gray-50">
               <tr>
-                <th scope="col" class="flex items-center ml-3 px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
-                  Name
+                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
+                  <div class="flex items-center ml-4">
+                    Name
+                    <Icon icon="ant-design:caret-up-outlined" class="ml-2 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="nameAscendingOrder()" />
+                    <Icon icon="ant-design:caret-down-outlined" class="cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="nameDescendingOrder()" />
+                  </div>
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
-                  Email
+                  <div class="flex items-center justify-center -ml-3">
+                    Email
+                    <Icon icon="ant-design:caret-up-outlined" class="ml-2 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="emailAscendingOrder()" />
+                    <Icon icon="ant-design:caret-down-outlined" class="cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="emailDescendingOrder()" />
+                  </div>
                 </th>
                 <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
-                  Phone
+                  <div class="flex items-center justify-center -ml-3">
+                    Phone
+                    <Icon icon="ant-design:caret-up-outlined" class="ml-2 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="phoneAscendingOrder()" />
+                    <Icon icon="ant-design:caret-down-outlined" class="cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="phoneDescendingOrder()" />
+                  </div>
                 </th>
-                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
+                <th scope="col" class=" flex justify-center -ml-4 px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   Provider
                 </th>
-                <th scope="col" class="relative px-6 py-3">
+                <th scope="col" class="px-6 py-3">
                   <span class="sr-only">Actions</span>
                 </th>
-                <th scope="col" class="flex relative items-center px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
-                  <span class="absolute bottom-1">
-                    <Icon icon="ant-design:caret-up-outlined" class="mx-1 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="clientAscendingOrder()" />
-                  </span>
-                  <span class="absolute top-4">
-                    <Icon icon="ant-design:caret-down-outlined" class="mx-1 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="clientDescendingOrder()" />
-                  </span>
+                <th scope="col" class="px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
+                  <div class="flex items-center justify-center">
+                    <Icon icon="ant-design:caret-up-outlined" class="cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="clientAscendingOrder()" />
+                    <Icon icon="ant-design:caret-down-outlined" class="cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="clientDescendingOrder()" />
+                  </div>
                 </th>
               </tr>
             </thead>
@@ -54,7 +64,6 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm text-gray-900">{{ person.email }}</div>
-                  <!-- <div class="text-sm text-gray-500">{{ person.department }}</div> -->
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {{ person.phone }}
@@ -164,6 +173,30 @@ const onEdit = async (id) => {
 
 const clientDescendingOrder = async () => {
   await store.dispatch(actionTypes.SortClients)
+}
+
+const nameAscendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClientsByNameAscending)
+}
+
+const nameDescendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClientsByNameDescending)
+}
+
+const emailAscendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClientsByEmailAscending)
+}
+
+const emailDescendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClientsByEmailDescending)
+}
+
+const phoneAscendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClientsByPhoneAscending)
+}
+
+const phoneDescendingOrder = async () => {
+  await store.dispatch(actionTypes.SortClientsByPhoneDescending)
 }
 
 const clientAscendingOrder = async () => {

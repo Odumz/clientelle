@@ -39,7 +39,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input :disabled="editclient" @blur="emailCheck(proclient.email)" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
+                            <input :disabled="editclient" @blur="lowercaseEmail(proclient.email); emailCheck(proclient.email);" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
                           </div>
                           <p v-if="error.email" class="text-xs text-red-500 p-2"> {{ error.email }} </p>
                         </div>
@@ -303,7 +303,7 @@ const errorCheck = async () => {
       ...newError
     })
   } else if (!data.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-    newError.email = 'Client email be have email format'
+    newError.email = 'Client email should have email format'
     store.dispatch(actionTypes.UpdateErrorStatus, {
       ...newError
     })
@@ -344,6 +344,10 @@ const capName = (name) => {
 
 const capProviderName = (name) => {
   providerName.name = capitalize(name)
+}
+
+const lowercaseEmail = (email) => {
+  proclient.value.email = email.toLowerCase()
 }
 
 const onEditClient = async () => {

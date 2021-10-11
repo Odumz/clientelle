@@ -55,10 +55,53 @@ export default {
       await commit(mutationTypes.GetClients, data.clients)
       await dispatch(actionTypes.UpdateLoadingStatus, false)
     },
-    async [actionTypes.SortClients] ({ commit }) {
+    async [actionTypes.SortClients] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
       const url = '/clients/all?sortBy=createdAt:desc'
       const data = await fetchData(url)
       await commit(mutationTypes.GetClients, data.clients)
+    },
+    async [actionTypes.SortClientsByNameAscending] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
+      const url = '/clients/all?sortBy=name:asc'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
+    },
+    async [actionTypes.SortClientsByNameDescending] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
+      const url = '/clients/all?sortBy=name:desc'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
+    },
+    async [actionTypes.SortClientsByEmailAscending] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
+      const url = '/clients/all?sortBy=email:asc'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
+    },
+    async [actionTypes.SortClientsByEmailDescending] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
+      const url = '/clients/all?sortBy=email:desc'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
+    },
+    async [actionTypes.SortClientsByPhoneAscending] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
+      const url = '/clients/all?sortBy=phone:asc'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
+    },
+    async [actionTypes.SortClientsByPhoneDescending] ({ dispatch, commit }) {
+      await dispatch(actionTypes.UpdateLoadingStatus, true)
+      const url = '/clients/all?sortBy=phone:desc'
+      const data = await fetchData(url)
+      await commit(mutationTypes.GetClients, data.clients)
+      await dispatch(actionTypes.UpdateLoadingStatus, false)
     },
     async [actionTypes.AddClient] ({ dispatch, commit }, payload) {
       const newclient = await addData(payload.url, payload.data)
