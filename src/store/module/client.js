@@ -56,7 +56,7 @@ export default {
       await dispatch(actionTypes.UpdateLoadingStatus, false)
     },
     async [actionTypes.SortClients] ({ commit }) {
-      const url = '/clients/all?sortBy=createdAt:asc'
+      const url = '/clients/all?sortBy=createdAt:desc'
       const data = await fetchData(url)
       await commit(mutationTypes.GetClients, data.clients)
     },

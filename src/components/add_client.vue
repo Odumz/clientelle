@@ -28,7 +28,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
+                            <input v-model="proclient.name" @blur="capName(proclient.name)" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
                           </div>
                           <p v-if="error.name" class="text-xs text-red-500 p-2"> {{ error.name }} </p>
                         </div>
@@ -62,7 +62,7 @@
                           </div>
                           <div class="md:grid md:grid-cols-7 md:w-4/5 items-center ">
                             <div class="col-span-4 flex">
-                              <input v-model="providerName.name" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
+                              <input v-model="providerName.name" @blur="capProviderName(providerName.name)" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
                               <Icon v-if="editing" icon="akar-icons:circle-x" class="m-3" @click.prevent="cancelEdit" />
                             </div>
                             <div class="w-full col-span-3 md:mt-0 mt-2">
@@ -132,6 +132,7 @@ import { Icon } from '@iconify/vue'
 import emptyList from '@/components/empty_list.vue'
 import * as actionTypes from '../store/constants/actions'
 import Swal from 'sweetalert2'
+import capitalize from 'lodash/capitalize'
 
 const store = useStore()
 
@@ -335,6 +336,14 @@ const emailCheck = async (email) => {
     })
     submission.state = false
   }
+}
+
+const capName = (name) => {
+  proclient.value.name = capitalize(name)
+}
+
+const capProviderName = (name) => {
+  providerName.name = capitalize(name)
 }
 
 const onEditClient = async () => {

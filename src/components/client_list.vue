@@ -33,10 +33,10 @@
                 </th>
                 <th scope="col" class="flex relative items-center px-6 py-3 text-xs text-gray-500 font-bold tracking-wider">
                   <span class="absolute bottom-1">
-                    <Icon icon="ant-design:caret-up-outlined" class="mx-1" @click.prevent="clientAscendingOrder()" />
+                    <Icon icon="ant-design:caret-up-outlined" class="mx-1 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="clientAscendingOrder()" />
                   </span>
                   <span class="absolute top-4">
-                    <Icon icon="ant-design:caret-down-outlined" class="mx-1" @click.prevent="clientDescendingOrder()" />
+                    <Icon icon="ant-design:caret-down-outlined" class="mx-1 cursor-pointer text-gray-400 hover:text-gray-600" @click.prevent="clientDescendingOrder()" />
                   </span>
                 </th>
               </tr>
@@ -118,7 +118,7 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed } from 'vue'
 import { fetchDataByParams } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
@@ -126,8 +126,6 @@ import * as actionTypes from '../store/constants/actions'
 import Swal from 'sweetalert2'
 
 const store = useStore()
-
-const sorted = ref(false)
 
 const proclients = computed(() => {
   return store.getters.getClients.value
@@ -164,14 +162,12 @@ const onEdit = async (id) => {
   await store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 
-const clientAscendingOrder = async () => {
+const clientDescendingOrder = async () => {
   await store.dispatch(actionTypes.SortClients)
-  sorted.value = true
 }
 
-const clientDescendingOrder = async () => {
+const clientAscendingOrder = async () => {
   await store.dispatch(actionTypes.FetchClients)
-  sorted.value = false
 }
 
 const onAdd = async () => {

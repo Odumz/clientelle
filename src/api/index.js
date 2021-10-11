@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import Swal from 'sweetalert2'
 
 // api helper to fetch data from the backend
 export const fetchData = async (url) => {
@@ -29,23 +28,6 @@ export const addData = async (url, data) => {
   } catch (err) {
     return err
   }
-  // return await axios.post(url, data)
-  //   .then(response => {
-  //     Swal.fire({
-  //       title: 'Successful!',
-  //       text: 'New data added',
-  //       timer: 1500,
-  //       icon: 'success'
-  //     })
-  //     return response.data
-  //   })
-  //   .catch((error) => {
-  //     if (error.message.includes('409')) {
-  //       Swal.fire('Error', 'Duplicate data submitted', 'error')
-  //     } else if (error.message.includes('400')) {
-  //       Swal.fire('Error', 'Invalid/Incomplete data submitted', 'error')
-  //     }
-  //   })
 }
 
 // api helper to edit data in the backend
