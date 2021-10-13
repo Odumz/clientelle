@@ -28,7 +28,7 @@
             <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                 <Icon icon="akar-icons:search" />
             </span>
-            <input class="w-full rounded p-2" type="text" placeholder="Try 'emmanuel'">
+            <input class="w-full rounded p-2 focus:outline-none" type="text" placeholder="Try 'emmanuel'">
             <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
               <p class="font-semibold text-xs">Search</p>
             </button> -->

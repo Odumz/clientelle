@@ -29,9 +29,6 @@ export default {
     [mutationTypes.GetClients] (state, clients) {
       state.clients = clients
     },
-    [mutationTypes.SortClients] (state, clients) {
-      state.clients = clients
-    },
     [mutationTypes.SetClient] (state, client) {
       state.clients = [...state.clients, client]
     },

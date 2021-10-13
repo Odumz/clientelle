@@ -28,7 +28,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.name" @blur="capName(proclient.name)" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="Jane Doe">
+                            <input v-model="proclient.name" @blur="capName(proclient.name)" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400" type="text" placeholder="Jane Doe">
                           </div>
                           <p v-if="error.name" class="text-xs text-red-500 p-2"> {{ error.name }} </p>
                         </div>
@@ -39,7 +39,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input :disabled="editclient" @blur="lowercaseEmail(proclient.email); emailCheck(proclient.email);" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="email" placeholder="JaneDoe@gmail.com" required>
+                            <input :disabled="editclient" @blur="lowercaseEmail(proclient.email); emailCheck(proclient.email);" v-model="proclient.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400" type="email" placeholder="JaneDoe@gmail.com" required>
                           </div>
                           <p v-if="error.email" class="text-xs text-red-500 p-2"> {{ error.email }} </p>
                         </div>
@@ -50,7 +50,7 @@
                             </label>
                           </div>
                           <div class="md:w-full">
-                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="tel" placeholder="08054236958">
+                            <input v-model="proclient.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400" type="tel" placeholder="08054236958">
                           </div>
                           <p v-if="error.phone" class="text-xs text-red-500 p-2"> {{ error.phone }} </p>
                         </div>
@@ -62,15 +62,15 @@
                           </div>
                           <div class="md:grid md:grid-cols-7 md:w-4/5 items-center ">
                             <div class="col-span-4 flex">
-                              <input v-model="providerName.name" @blur="capProviderName(providerName.name)" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" type="text" placeholder="provider1">
+                              <input v-model="providerName.name" @blur="capProviderName(providerName.name)" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400" type="text" placeholder="provider1">
                               <Icon v-if="editing" icon="akar-icons:circle-x" class="m-3" @click.prevent="cancelEdit" />
                             </div>
                             <div class="w-full col-span-3 md:mt-0 mt-2">
-                              <button v-if="!editing" type="button" class="mt-3 inline-flex bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider(newProvider.name)">
+                              <button v-if="!editing" type="button" class="mt-3 inline-flex bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="addProvider(newProvider.name)">
                                 Add Provider
                               </button>
                               <div class="relative px-1" v-else>
-                              <button type="button" class="mt-3 ml-5 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="saveProvider(newProvider._id)">
+                              <button type="button" class="mt-3 ml-5 inline-flex justify-center bg-white rounded-md border border-gray-300 shadow-sm px-4 py-2 fontmedium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click="saveProvider(newProvider._id)">
                                 Save Provider
                               </button>
                               </div>
