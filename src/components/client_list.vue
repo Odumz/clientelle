@@ -15,7 +15,7 @@
               <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                   <Icon icon="akar-icons:search" />
               </span>
-              <input class="rounded p-2" v-model="searchText" type="text" placeholder="Try 'emmanuel'">{{ searchText }}
+              <input class="rounded p-2" v-model="searchText" type="text" placeholder="Try 'emmanuel'">
               <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
                 <p class="font-semibold text-xs">Search</p>
               </button> -->
