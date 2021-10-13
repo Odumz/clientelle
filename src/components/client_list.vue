@@ -10,7 +10,29 @@
               </span>
             </span>
           </h1>
-          <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
+          <div class="flex items-center ml-2">
+            <div class="bg-white shadow px-4 p-2 sm:flex mr-4 rounded-md hidden">
+              <span class="w-auto flex justify-end items-center text-gray-500 p-2">
+                  <Icon icon="akar-icons:search" />
+              </span>
+              <input class="rounded p-2" v-model="searchText" type="text" placeholder="Try 'emmanuel'">{{ searchText }}
+              <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
+                <p class="font-semibold text-xs">Search</p>
+              </button> -->
+            </div>
+            <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
+          </div>
+        </div>
+        <div>
+          <div class="bg-white w-full shadow px-4 p-2 flex mr-4 sm:hidden">
+            <span class="w-auto flex justify-end items-center text-gray-500 p-2">
+                <Icon icon="akar-icons:search" />
+            </span>
+            <input class="w-full rounded p-2" type="text" placeholder="Try 'emmanuel'">
+            <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
+              <p class="font-semibold text-xs">Search</p>
+            </button> -->
+          </div>
         </div>
         <div class="shadow overflow-hidden sm:rounded-lg">
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">
@@ -127,7 +149,7 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { fetchDataByParams } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
@@ -146,6 +168,8 @@ onMounted(async () => {
   await store.dispatch(actionTypes.FetchClients)
   await store.dispatch(actionTypes.FetchProviders)
 })
+
+const searchText = ref('')
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
