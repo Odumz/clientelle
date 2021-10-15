@@ -15,7 +15,7 @@
               <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                   <Icon icon="akar-icons:search" />
               </span>
-              <input class="rounded p-2" @keyup="filter" v-model="searchText" type="text" placeholder="Try any name">
+              <input class="rounded p-2" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Try any name">
               <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
                 <p class="font-semibold text-xs">Search</p>
               </button> -->
@@ -28,7 +28,7 @@
             <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                 <Icon icon="akar-icons:search" />
             </span>
-            <input class="w-full rounded p-2 focus:outline-none" type="text" placeholder="Try any name">
+            <input class="w-full rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Try any name">
             <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
               <p class="font-semibold text-xs">Search</p>
             </button> -->
@@ -232,6 +232,10 @@ const nameDescendingOrder = async () => {
 
 const emailAscendingOrder = async () => {
   await store.dispatch(actionTypes.SortClientsByEmailAscending)
+}
+
+const close = async () => {
+  searchText.value = ''
 }
 
 const emailDescendingOrder = async () => {
