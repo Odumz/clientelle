@@ -132,7 +132,7 @@ import { Icon } from '@iconify/vue'
 import emptyList from '@/components/empty_list.vue'
 import * as actionTypes from '../store/constants/actions'
 import Swal from 'sweetalert2'
-import capitalize from 'lodash/capitalize'
+import { startCase, toLower } from 'lodash'
 
 const store = useStore()
 
@@ -339,11 +339,11 @@ const emailCheck = async (email) => {
 }
 
 const capName = (name) => {
-  proclient.value.name = capitalize(name)
+  proclient.value.name = startCase(toLower(name))
 }
 
 const capProviderName = (name) => {
-  providerName.name = capitalize(name)
+  providerName.name = startCase(toLower(name))
 }
 
 const lowercaseEmail = (email) => {
