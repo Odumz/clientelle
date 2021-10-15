@@ -15,7 +15,7 @@
               <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                   <Icon icon="akar-icons:search" />
               </span>
-              <input class="rounded p-2" v-model="searchText" type="text" placeholder="Try 'emmanuel'">
+              <input class="rounded p-2" @keyup="filter" v-model="searchText" type="text" placeholder="Try any name">
               <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
                 <p class="font-semibold text-xs">Search</p>
               </button> -->
@@ -28,7 +28,7 @@
             <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                 <Icon icon="akar-icons:search" />
             </span>
-            <input class="w-full rounded p-2 focus:outline-none" type="text" placeholder="Try 'emmanuel'">
+            <input class="w-full rounded p-2 focus:outline-none" type="text" placeholder="Try any name">
             <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
               <p class="font-semibold text-xs">Search</p>
             </button> -->
@@ -73,7 +73,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody v-if="proclients.length > 0" class="bg-white divide-y divide-gray-200">
+            <tbody id="client" v-if="proclients.length > 0" class="bg-white divide-y divide-gray-200">
               <tr v-for="(person) in proclients" :key="person._id" class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="flex items-center">
@@ -104,24 +104,24 @@
               </tr>
             </tbody>
           </table>
-          <div v-if="proclients.length > 0">
-            <div v-for="(person, index) in proclients" :key="index" class="min-w-full flex border justify-center lg:hidden">
+          <div id="clients" v-if="proclients.length > 0">
+            <div id="person" v-for="(person, index) in proclients" :key="index" class="min-w-full flex border justify-center lg:hidden">
               <div class="text-left py-5 w-3/4">
-                <div>
-                  Name: {{ person.name }}
-                </div>
-                <div>
-                  Email: {{ person.email }}
-                </div>
-                <div>
-                  Phone: {{ person.phone }}
-                </div>
-                <div>
+                <span class="flex">
+                  Name: <p class="px-1">{{ person.name }}</p>
+                </span>
+                <span class="flex">
+                  Email: <p class="px-1">{{ person.email }}</p>
+                </span>
+                <span class="flex">
+                  Phone: <p class="px-1">{{ person.phone }}</p>
+                </span>
+                <span class="flex">
                   Provider:
-                  <span>
+                  <p class="px-1">
                     {{ person.provider.map((e) => e.name).join(', ') }}
-                  </span>
-                </div>
+                  </p>
+                </span>
               </div>
               <div class="py-5 grid items-center justify-items-center">
                 <Icon icon="bx:bxs-edit" class="mx-4" @click.prevent="onEdit(person._id)" />
@@ -193,6 +193,29 @@ const onEdit = async (id) => {
   await store.dispatch(actionTypes.UpdateOpenStatus, true)
   await store.dispatch(actionTypes.UpdateClientEditingStatus, true)
   await store.dispatch(actionTypes.UpdateLoadingStatus, false)
+}
+
+const filter = async () => {
+  const search = searchText.value.toUpperCase()
+  const clientList = document.getElementById('client')
+  const clientLists = document.getElementById('clients')
+  const rows = clientList.getElementsByTagName('tr')
+  const mobileRows = clientLists.getElementsByTagName('div')
+
+  for (let i = 0; i < rows.length; i++) {
+    const firstCol = rows[i].getElementsByTagName('td')[0]
+    if (firstCol) {
+      const lang = firstCol.innerText
+      rows[i].style.display = lang.toUpperCase().indexOf(search) > -1 ? '' : 'none'
+    }
+  }
+  for (let i = 0; i < mobileRows.length; i++) {
+    const firstMCol = mobileRows[i].getElementsByTagName('p')[0]
+    if (firstMCol) {
+      const mLang = firstMCol.innerText
+      mobileRows[i].style.display = mLang.toUpperCase().indexOf(search) > -1 ? '' : 'none'
+    }
+  }
 }
 
 const clientDescendingOrder = async () => {

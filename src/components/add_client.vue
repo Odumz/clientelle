@@ -192,7 +192,7 @@ const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, false)
   setTimeout(() => {
     store.dispatch(actionTypes.UpdateProclient, oldProclient)
-  }, 500)
+  }, 100)
 }
 
 const provider = computed(() => {
@@ -362,7 +362,7 @@ const onEditClient = async () => {
     })
     setTimeout(() => {
       store.dispatch(actionTypes.UpdateProclient, oldProclient)
-    }, 500)
+    }, 100)
   }
 }
 
@@ -403,7 +403,7 @@ const onSubmit = async () => {
     })
     setTimeout(() => {
       store.dispatch(actionTypes.UpdateProclient, oldProclient)
-    }, 500)
+    }, 100)
   }
 }
 
