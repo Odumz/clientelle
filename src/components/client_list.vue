@@ -15,7 +15,7 @@
               <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                   <Icon icon="akar-icons:search" />
               </span>
-              <input class="rounded p-2" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Try any name">
+              <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
               <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
                 <p class="font-semibold text-xs">Search</p>
               </button> -->
@@ -28,7 +28,7 @@
             <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                 <Icon icon="akar-icons:search" />
             </span>
-            <input class="w-full rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Try any name">
+            <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
             <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
               <p class="font-semibold text-xs">Search</p>
             </button> -->
@@ -198,22 +198,30 @@ const onEdit = async (id) => {
 const filter = async () => {
   const search = searchText.value.toUpperCase()
   const clientList = document.getElementById('client')
-  const clientLists = document.getElementById('clients')
+  const mobileClientList = document.getElementById('clients')
   const rows = clientList.getElementsByTagName('tr')
-  const mobileRows = clientLists.getElementsByTagName('div')
+  const mobileRows = mobileClientList.getElementsByTagName('div')
 
   for (let i = 0; i < rows.length; i++) {
     const firstCol = rows[i].getElementsByTagName('td')[0]
+    const secondCol = rows[i].getElementsByTagName('td')[1]
+    const thirdCol = rows[i].getElementsByTagName('td')[2]
     if (firstCol) {
       const lang = firstCol.innerText
-      rows[i].style.display = lang.toUpperCase().indexOf(search) > -1 ? '' : 'none'
+      const sLang = secondCol.innerText
+      const tLang = thirdCol.innerText
+      rows[i].style.display = ((lang.toUpperCase().indexOf(search) > -1) || (sLang.toUpperCase().indexOf(search) > -1) || (tLang.indexOf(search) > -1)) ? '' : 'none'
     }
   }
   for (let i = 0; i < mobileRows.length; i++) {
     const firstMCol = mobileRows[i].getElementsByTagName('p')[0]
+    const secondMCol = mobileRows[i].getElementsByTagName('p')[1]
+    const thirdMCol = mobileRows[i].getElementsByTagName('p')[2]
     if (firstMCol) {
-      const mLang = firstMCol.innerText
-      mobileRows[i].style.display = mLang.toUpperCase().indexOf(search) > -1 ? '' : 'none'
+      const lang = firstMCol.innerText
+      const sLang = secondMCol.innerText
+      const tLang = thirdMCol.innerText
+      mobileRows[i].style.display = ((lang.toUpperCase().indexOf(search) > -1) || (sLang.toUpperCase().indexOf(search) > -1) || (tLang.indexOf(search) > -1)) ? '' : 'none'
     }
   }
 }
