@@ -11,15 +11,13 @@
             </span>
           </h1>
           <div class="flex items-center ml-2">
-            <div class="bg-white shadow px-4 p-2 sm:flex mr-4 rounded-md hidden">
+            <!-- <div class="bg-white shadow px-4 p-2 sm:flex mr-4 rounded-md hidden">
               <span class="w-auto flex justify-end items-center text-gray-500 p-2">
                   <Icon icon="akar-icons:search" />
               </span>
               <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
-              <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
-                <p class="font-semibold text-xs">Search</p>
-              </button> -->
-            </div>
+            </div> -->
+            <search />
             <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
           </div>
         </div>
@@ -149,12 +147,13 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed } from 'vue'
 import { fetchDataByParams } from '../api'
 import emptyList from '@/components/empty_list.vue'
 import { Icon } from '@iconify/vue'
 import * as actionTypes from '../store/constants/actions'
 import Swal from 'sweetalert2'
+import search from '@/components/search.vue'
 
 const store = useStore()
 
@@ -168,8 +167,6 @@ onMounted(async () => {
   await store.dispatch(actionTypes.FetchClients)
   await store.dispatch(actionTypes.FetchProviders)
 })
-
-const searchText = ref('')
 
 const onDelete = async (id) => {
   store.dispatch(actionTypes.UpdateLoadingStatus, true)
@@ -195,37 +192,6 @@ const onEdit = async (id) => {
   await store.dispatch(actionTypes.UpdateLoadingStatus, false)
 }
 
-const filter = async () => {
-  const search = searchText.value.toUpperCase()
-  const clientList = document.getElementById('client')
-  const mobileClientList = document.getElementById('clients')
-  const rows = clientList.getElementsByTagName('tr')
-  const mobileRows = mobileClientList.getElementsByTagName('div')
-
-  for (let i = 0; i < rows.length; i++) {
-    const firstCol = rows[i].getElementsByTagName('td')[0]
-    const secondCol = rows[i].getElementsByTagName('td')[1]
-    const thirdCol = rows[i].getElementsByTagName('td')[2]
-    if (firstCol) {
-      const lang = firstCol.innerText
-      const sLang = secondCol.innerText
-      const tLang = thirdCol.innerText
-      rows[i].style.display = ((lang.toUpperCase().indexOf(search) > -1) || (sLang.toUpperCase().indexOf(search) > -1) || (tLang.indexOf(search) > -1)) ? '' : 'none'
-    }
-  }
-  for (let i = 0; i < mobileRows.length; i++) {
-    const firstMCol = mobileRows[i].getElementsByTagName('p')[0]
-    const secondMCol = mobileRows[i].getElementsByTagName('p')[1]
-    const thirdMCol = mobileRows[i].getElementsByTagName('p')[2]
-    if (firstMCol) {
-      const lang = firstMCol.innerText
-      const sLang = secondMCol.innerText
-      const tLang = thirdMCol.innerText
-      mobileRows[i].style.display = ((lang.toUpperCase().indexOf(search) > -1) || (sLang.toUpperCase().indexOf(search) > -1) || (tLang.indexOf(search) > -1)) ? '' : 'none'
-    }
-  }
-}
-
 const clientDescendingOrder = async () => {
   await store.dispatch(actionTypes.SortClients)
 }
@@ -240,10 +206,6 @@ const nameDescendingOrder = async () => {
 
 const emailAscendingOrder = async () => {
   await store.dispatch(actionTypes.SortClientsByEmailAscending)
-}
-
-const close = async () => {
-  searchText.value = ''
 }
 
 const emailDescendingOrder = async () => {
