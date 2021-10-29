@@ -5,8 +5,7 @@ import store from './store'
 import '@/assets/css/main.css'
 import axios from 'axios'
 
-// axios.defaults.baseURL = 'https://clientelle.herokuapp.com/api/v1'
-axios.defaults.baseURL = 'http://localhost:5000/api/v1'
+axios.defaults.baseURL = 'https://clientelle.herokuapp.com/api/v1'
 
 // Add a request interceptor
 // axios.interceptors.request.use(function (config) {
