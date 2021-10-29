@@ -12,10 +12,10 @@
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div class="sm:flex sm:items-start">
                 <div @keyup.esc="close(); cancelEdit();" class="mt-3 text-center sm:mt-0 sm:text-left">
-                  <div class="flex px-5 borderb-2">
-                  <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
-                    {{ title }} Client
-                  </DialogTitle>
+                  <div class="flex px-5">
+                    <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                      {{ title }} Client
+                    </DialogTitle>
                   </div>
                   <hr class="my-3 w-full -ml-10 px-64" />
                   <div class="mt-6">
@@ -102,8 +102,8 @@
                 </div>
               </div>
             </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse flex-col-reverse">
-              <button v-if="!editclient" :disabled="submission.state" type="button" class="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse flex-col-reverse my-4">
+              <button v-if="!editclient" :disabled="submission.state" type="button" class="w-full inline-flex my-2 justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
                 Add Client
               </button>
               <button v-else type="button" class="sm:my-0 my-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onEditClient">
@@ -112,7 +112,7 @@
               <button type="button" class="sm:my-0 mt-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-gray-700 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="close">
                 Cancel
               </button>
-              <button v-if="editclient" type="button" class="sm:my-0 my-4 w-full mr-28 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onDelete(proclient._id)">
+              <button v-if="editclient" type="button" class="sm:my-0 my-4 w-full mr-44 inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onDelete(proclient._id)">
                 Delete Client
               </button>
             </div>
