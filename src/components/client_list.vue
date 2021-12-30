@@ -17,20 +17,12 @@
               </span>
               <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
             </div> -->
-            <search />
+            <search name="desktop" />
             <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
           </div>
         </div>
         <div>
-          <div class="bg-white w-full shadow px-4 p-2 flex mr-4 sm:hidden">
-            <span class="w-auto flex justify-end items-center text-gray-500 p-2">
-                <Icon icon="akar-icons:search" />
-            </span>
-            <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
-            <!-- <button class="bg-blue-400 hover:bg-blue-300 rounded text-white p-2 px-4">
-              <p class="font-semibold text-xs">Search</p>
-            </button> -->
-          </div>
+          <search />
         </div>
         <div class="shadow overflow-hidden sm:rounded-lg">
           <table class="min-w-full divide-y divide-gray-200 hidden lg:table ">

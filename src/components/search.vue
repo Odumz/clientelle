@@ -1,17 +1,33 @@
 <template>
+  <div v-if="name=='desktop'">
     <div class="bg-white shadow px-4 p-2 sm:flex mr-4 rounded-md hidden">
       <span class="w-auto flex justify-end items-center text-gray-500 p-2">
           <Icon icon="akar-icons:search" />
       </span>
       <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
     </div>
+  </div>
+  <div v-else>
+    <div class="bg-white w-full shadow px-4 p-2 flex mr-4 sm:hidden">
+      <span class="w-auto flex justify-end items-center text-gray-500 p-2">
+          <Icon icon="akar-icons:search" />
+      </span>
+      <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, toRefs, defineProps } from 'vue'
 import { Icon } from '@iconify/vue'
 
 const searchText = ref('')
+
+const props = defineProps({
+  name: String
+})
+
+const { name } = toRefs(props)
 
 const filter = async () => {
   const search = searchText.value.toUpperCase()
