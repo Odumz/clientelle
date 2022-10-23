@@ -103,7 +103,7 @@
               </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 flex sm:flex-row-reverse flex-col-reverse my-4">
-              <button v-if="!editclient" :disabled="submission.state" type="button" class="w-full inline-flex my-2 justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
+              <button v-if="!editclient" :disabled="submission.state" type="button" class="sm:my-0 my-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onSubmit">
                 Add Client
               </button>
               <button v-else type="button" class="sm:my-0 my-2 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" @click.prevent="onEditClient">

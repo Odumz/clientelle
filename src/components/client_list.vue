@@ -18,7 +18,9 @@
               <input class="rounded p-2 focus:outline-none" @keyup.esc="close" @keyup="filter" v-model="searchText" type="text" placeholder="Search here...">
             </div> -->
             <search name="desktop" />
-            <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 rounded border shadow-sm border-gray-300">New Client</button>
+            <button :disabled="loadingState.value" @click.prevent="onAdd" class="text-sm px-4 py-3 flex items-center hover:text-white hover:bg-green-500 rounded border shadow-sm border-gray-300"><span class="mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 20v-8m0 0V4m0 8h8m-8 0H4"/></svg>
+            </span> New Client</button>
           </div>
         </div>
         <div>
@@ -121,7 +123,7 @@
           </div>
           <div v-else>
             <div v-if="loadingState" class="inline-flex justify-center items-center">
-              Loading <span><img class="mx-3 w-9" src="https://res.cloudinary.com/griffintech/image/upload/v1633501742/loading_slh6hl.svg" alt="loading..." /></span>
+              Loading <span><img class="mx-3 w-9" src="https://res.cloudinary.com/odumz/image/upload/v1666514328/projects/barney/loading_hxpbbn.svg" alt="loading..." /></span>
             </div>
             <div v-else>
               <empty-list @event="onAdd">
